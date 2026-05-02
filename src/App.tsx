@@ -54,7 +54,7 @@ const Navbar = () => {
               <ShieldCheck className="text-white w-6 h-6" />
             </div>
             <span className={`text-2xl font-black tracking-tighter uppercase transition-colors duration-300 ${isScrolled ? 'text-[#00263f]' : 'text-white'}`}>
-              NDT CERTIFY
+              World Wide NDT Institute
             </span>
           </div>
           
@@ -553,7 +553,7 @@ export default function App() {
                 <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center shrink-0">
                   <ShieldCheck className="text-white w-5 h-5" />
                 </div>
-                <span className="text-2xl font-black tracking-tighter uppercase whitespace-nowrap">NDT CERTIFY</span>
+                <span className="text-2xl font-black tracking-tighter uppercase whitespace-nowrap">World Wide NDT Institute</span>
               </div>
               <p className="text-slate-400 font-medium leading-relaxed mb-10 text-base">
                 Global precision certification center for Non-Destructive Testing. Validated by industry veterans for the next generation of engineers.
@@ -602,7 +602,7 @@ export default function App() {
           
           <div className="pt-20 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="text-slate-500 text-sm font-black uppercase tracking-widest">
-              © {new Date().getFullYear()} NDT CERTIFY • PRECISION ENGINEERED
+              © {new Date().getFullYear()} World Wide NDT Institute  • PRECISION ENGINEERED
             </div>
             <div className="flex gap-8 text-slate-500 text-xs font-bold uppercase tracking-widest">
               <a href="#" className="hover:text-white transition-colors">Privacy</a>
