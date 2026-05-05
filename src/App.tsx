@@ -38,7 +38,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
 );
 
 const SectionTitle = ({ children, accent }: { children: React.ReactNode, accent?: string }) => (
-  <h2 className="text-4xl md:text-6xl font-extrabold mb-6 leading-[1.1] tracking-tighter">
+  <h2 className="text-4xl md:text-6xl font-black mb-6 leading-[1.1] tracking-tighter">
     {children} {accent && <span className="gold-text">{accent}</span>}
   </h2>
 );
@@ -311,8 +311,8 @@ const CourseCard = ({ icon: Icon, title, desc, price, duration, type, accentColo
 
     <div className="pt-8 border-t border-white/5 flex items-center justify-between">
       <div>
-        <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Full Certification</div>
-        <div className="text-2xl font-display font-black text-gold">₹{price}</div>
+        <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest font-mono">Full Certification</div>
+        <div className="text-2xl font-mono font-black text-gold tracking-tight">₹{price}</div>
       </div>
       <a href="#admission" className="w-12 h-12 rounded-full glass-card border-white/20 flex items-center justify-center hover:bg-gold hover:text-navy-dark transition-all duration-300">
         <ChevronRight className="w-5 h-5" />
@@ -454,7 +454,7 @@ export default function App() {
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   return (
-    <div className="relative min-h-screen bg-navy selection:bg-gold selection:text-navy-dark">
+    <div className="relative min-h-screen bg-navy selection:bg-gold selection:text-navy-dark technical-grid">
       <motion.div className="fixed top-0 left-0 right-0 h-1 gold-gradient origin-left z-[999]" style={{ scaleX }} />
       
       <TopTicker />
