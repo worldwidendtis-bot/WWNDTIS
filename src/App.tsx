@@ -1,218 +1,444 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Phone, 
-  MessageCircle, 
+  Mail, 
+  MapPin, 
   Star, 
   CheckCircle2, 
   Users, 
-  Handshake, 
-  ChevronRight, 
+  Award, 
   Clock, 
-  GraduationCap, 
-  Microscope, 
-  Briefcase, 
-  FileCheck,
-  Play,
-  ChevronDown,
-  Navigation,
-  Mail,
-  MapPin,
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  ShieldCheck,
-  Award
+  ChevronRight, 
+  ChevronDown, 
+  Play, 
+  ShieldCheck, 
+  Globe2, 
+  HardHat, 
+  Facebook, 
+  Twitter, 
+  Instagram, 
+  Youtube,
+  Search,
+  BookOpen,
+  Zap,
+  Target,
+  Trophy,
+  Microscope,
+  MessageCircle
 } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring, useInView } from 'motion/react';
 
-// --- Components ---
+// --- Global UI Components ---
 
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex items-center gap-3 mb-4">
+    <div className="w-8 h-[1px] bg-gold" />
+    <span className="text-[11px] font-bold text-gold uppercase tracking-[0.2em]">{children}</span>
+  </div>
+);
+
+const SectionTitle = ({ children, accent }: { children: React.ReactNode, accent?: string }) => (
+  <h2 className="text-4xl md:text-6xl font-extrabold mb-6 leading-[1.1] tracking-tighter">
+    {children} {accent && <span className="gold-text">{accent}</span>}
+  </h2>
+);
+
+const SectionSub = ({ children }: { children: React.ReactNode }) => (
+  <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mb-12">
+    {children}
+  </p>
+);
+
+// --- Ticker ---
+const TopTicker = () => (
+  <div className="bg-gold h-10 flex items-center overflow-hidden whitespace-nowrap z-[100] relative">
+    <motion.div
+      animate={{ x: ["0%", "-50%"] }}
+      transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+      className="flex gap-16 items-center px-4"
+    >
+      {Array(10).fill(null).map((_, i) => (
+        <span key={i} className="text-[11px] font-bold text-navy-dark uppercase tracking-widest flex items-center gap-4">
+          🏆 India's #1 NDT Training Institute • 100% Placement Guarantee • Admissions Open for May 2024 Batch
+        </span>
+      ))}
+    </motion.div>
+  </div>
+);
+
+// --- Navbar ---
 const Navbar = () => {
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    return scrollY.on('change', (latest) => setIsScrolled(latest > 50));
+    return scrollY.on('change', (latest) => setIsScrolled(latest > 80));
   }, [scrollY]);
 
   return (
-    <motion.nav 
+    <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "circOut" }}
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/80 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] border-b border-white/20' 
-          : 'bg-transparent py-4'
+      className={`fixed top-10 left-0 right-0 z-50 transition-all duration-500 px-6 sm:px-12 ${
+        isScrolled ? 'top-0 py-4' : 'py-8'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex-shrink-0 flex items-center gap-3">
-            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center rotate-3 shadow-lg shadow-orange-500/20">
-              <ShieldCheck className="text-white w-6 h-6" />
-            </div>
-            <span className={`text-2xl font-black tracking-tighter uppercase transition-colors duration-300 ${isScrolled ? 'text-[#00263f]' : 'text-white'}`}>
-              World Wide NDT Institute
-            </span>
+      <div className={`max-w-7xl mx-auto flex items-center justify-between rounded-full p-2 px-8 transition-all duration-500 ${
+        isScrolled ? 'glass-card bg-navy-dark/90 shadow-2xl py-3' : 'bg-transparent'
+      }`}>
+        <a href="#" className="flex items-center gap-3 group">
+          <div className="w-12 h-12 gold-gradient rounded-xl flex items-center justify-center font-display font-extrabold text-navy-dark text-lg shadow-lg group-hover:rotate-6 transition-transform">
+            WW<br/>NDT
           </div>
-          
-          <div className="hidden md:flex items-center space-x-8">
-            {['Home', 'Courses', 'Placement', 'About', 'Contact'].map((item) => (
-              <a 
-                key={item} 
-                href={`#${item.toLowerCase()}`} 
-                className={`text-sm font-bold transition-all duration-300 relative group ${
-                  isScrolled ? 'text-slate-600' : 'text-white/80'
-                } hover:text-orange-500`}
-              >
-                {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-500 transition-all group-hover:w-full" />
-              </a>
-            ))}
-            <button className="bg-orange-500 text-white px-7 py-3 rounded-xl text-sm font-black shadow-xl shadow-orange-500/30 hover:scale-105 active:scale-95 transition-all">
-              GET CERTIFIED
-            </button>
+          <div className="hidden sm:block">
+            <span className="text-xl font-bold tracking-tighter block leading-none">WORLD WIDE</span>
+            <span className="text-[10px] uppercase font-black tracking-widest text-gold">NDT Institute</span>
           </div>
+        </a>
 
-          <div className="md:hidden">
-            <button className={`p-2 transition-colors ${isScrolled ? 'text-slate-600' : 'text-white'}`}>
-              <Navigation className="w-6 h-6" />
-            </button>
-          </div>
+        <nav className="hidden md:flex items-center gap-1">
+          {['Home', 'Courses', 'Why Us', 'Placement', 'FAQ'].map((item) => (
+            <a 
+              key={item} 
+              href={`#${item.toLowerCase().replace(' ', '-')}`} 
+              className="px-5 py-2 text-[13px] font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-widest relative group"
+            >
+              {item}
+              <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
+            </a>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-4">
+          <a href="tel:+917290095961" className="hidden lg:flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-gold transition-colors">
+            <Phone className="w-4 h-4 text-gold" /> +91 72900 95961
+          </a>
+          <a href="#admission" className="btn-primary py-3 px-8 rounded-full gold-gradient text-navy-dark font-bold text-sm shadow-xl shadow-gold/20 hover:scale-105 active:scale-95 transition-all">
+            Apply Now
+          </a>
         </div>
       </div>
-    </motion.nav>
+    </motion.header>
   );
 };
 
-const Card3D = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [rotateX, setRotateX] = useState(0);
-  const [rotateY, setRotateY] = useState(0);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const { left, top, width, height } = containerRef.current.getBoundingClientRect();
-    const x = (e.clientX - left) / width - 0.5;
-    const y = (e.clientY - top) / height - 0.5;
-    setRotateX(y * -15);
-    setRotateY(x * 15);
-  };
-
-  const handleMouseLeave = () => {
-    setRotateX(0);
-    setRotateY(0);
-  };
-
+// --- Hero Section ---
+const Hero = () => {
   return (
-    <motion.div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      animate={{ rotateX, rotateY }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      style={{ perspective: "1000px" }}
-      className={`relative group ${className}`}
-    >
-      <div className="transition-all duration-300 transform group-hover:scale-[1.02]">
-        {children}
+    <section className="relative min-h-screen flex items-center pt-32 pb-40 overflow-hidden">
+      {/* Background elements moved to global index.css body background */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-1/4 right-[-10%] w-[600px] h-[600px] bg-steel/30 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-gold/5 rounded-full blur-[100px]" />
+        <div className="absolute inset-0 bg-navy [mask-image:radial-gradient(ellipse_at_center,transparent_40%,black)]" />
       </div>
-    </motion.div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 w-full">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-10 backdrop-blur-md">
+              <div className="w-2 h-2 bg-gold rounded-full animate-pulse shadow-[0_0_10px_#C8A45A]" />
+              <span className="text-[10px] font-bold text-gold uppercase tracking-[0.2em]">Admissions Open — Batch Starting Soon</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-8xl font-black mb-8 leading-[0.95] tracking-tight shrink-0">
+               Launch Your <br />
+               <span className="gold-text">NDT & QA/QC</span> <br />
+               Industry Career
+            </h1>
+            
+            <p className="text-xl text-slate-300 leading-relaxed mb-12 max-w-xl opacity-80">
+              India's most trusted Non-Destructive Testing training institute. Get certified, get placed—with expert instructors and 100% job guarantee.
+            </p>
+
+            <div className="flex flex-wrap gap-6 items-center mb-16">
+              <motion.a 
+                href="#admission"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="gold-gradient text-navy-dark px-10 py-5 rounded-full font-bold text-lg shadow-2xl shadow-gold/30 flex items-center gap-3"
+              >
+                Enroll Now • Free Counselling <ChevronRight className="w-5 h-5" />
+              </motion.a>
+              <a href="#courses" className="flex items-center gap-3 text-white font-bold group">
+                <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-all">
+                  <Play className="w-4 h-4 fill-current text-white group-hover:text-gold" />
+                </div>
+                Browse Courses
+              </a>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 pt-12 border-t border-white/10">
+              {[
+                { n: "10K+", l: "Trained" },
+                { n: "100%", l: "Placement" },
+                { n: "50+", l: "Awards" },
+                { n: "15+", l: "Years" }
+              ].map((s, i) => (
+                <div key={i}>
+                  <div className="text-3xl font-display font-black text-gold mb-1">{s.n}</div>
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+            className="hidden lg:block relative"
+          >
+            <div className="relative glass-card bg-navy-mid/60 p-10 rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.5)] border-white/5 relative z-10">
+              <div className="absolute -top-10 -right-10 w-48 h-48 bg-gold/10 rounded-full blur-3xl animate-pulse" />
+              
+              <div className="flex items-center gap-4 mb-10 bg-gold/10 border border-gold/20 p-4 rounded-2xl">
+                 <div className="w-12 h-12 gold-gradient rounded-xl flex items-center justify-center">
+                    <Trophy className="w-6 h-6 text-navy-dark" />
+                 </div>
+                 <div>
+                    <div className="text-sm font-bold text-gold">100% Placement Guaranteed</div>
+                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Global Network Partner</div>
+                 </div>
+              </div>
+
+              <div className="space-y-4 mb-10">
+                {[
+                  { name: "NDT Level II Course", meta: "45 Days • Lab Training", price: "₹35K" },
+                  { name: "QA/QC Specialization", meta: "30 Days • Certified", price: "₹35K" },
+                  { name: "Fire & Safety Expert", meta: "3 Months • Field Prac", price: "₹45K" }
+                ].map((c, i) => (
+                  <div key={i} className="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-all group border border-white/5 hover:border-gold/30">
+                    <div>
+                      <div className="text-sm font-bold mb-1 group-hover:text-gold transition-colors">{c.name}</div>
+                      <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{c.meta}</div>
+                    </div>
+                    <div className="text-md font-display font-black text-gold">{c.price}</div>
+                  </div>
+                ))}
+              </div>
+
+              <button className="w-full py-5 rounded-2xl gold-gradient text-navy-dark font-extrabold text-lg shadow-xl shadow-gold/20 hover:scale-105 transition-transform">
+                 Claim Your Scholarship
+              </button>
+            </div>
+
+            {/* Floating Float Cards */}
+            <motion.div 
+               animate={{ y: [0, -15, 0] }}
+               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+               className="absolute -top-12 -left-12 glass-card p-6 rounded-2xl z-20 shadow-2xl"
+            >
+               <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">Google Rating</div>
+               <div className="flex items-center gap-3">
+                  <div className="text-2xl font-black text-gold">4.9</div>
+                  <div className="flex gap-1">
+                    {[1,2,3,4,5].map(s => <Star key={s} className="w-3 h-3 fill-gold text-gold" />)}
+                  </div>
+               </div>
+            </motion.div>
+
+            <motion.div 
+               animate={{ y: [0, 15, 0] }}
+               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+               className="absolute -bottom-10 -right-10 glass-card p-6 rounded-2xl z-20 shadow-2xl"
+            >
+               <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">Global Alumni</div>
+               <div className="text-2xl font-black text-gold">10K+</div>
+               <div className="flex -space-x-3 mt-4">
+                  {[1,2,3,4].map(i => (
+                    <div key={i} className="w-8 h-8 rounded-full border-2 border-navy-mid bg-slate-700" />
+                  ))}
+                  <div className="w-8 h-8 rounded-full border-2 border-navy-mid bg-navy-mid flex items-center justify-center text-[8px] font-black">+4K</div>
+               </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
   );
 };
 
-const CourseCard = ({ title, duration, description, isBestSeller, image, index }: any) => (
-  <motion.div
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.8, delay: index * 0.1 }}
-  >
-    <Card3D className="h-full">
-      <div className="bg-white rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,38,63,0.1)] overflow-hidden border border-slate-100 flex flex-col h-full ring-1 ring-slate-100/50">
-        <div className="relative h-56 sm:h-64 overflow-hidden">
-          <img 
-            src={image} 
-            alt={title} 
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#00263f]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          {isBestSeller && (
-            <span className="absolute top-4 left-4 bg-orange-500 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
-              Bestseller
-            </span>
-          )}
-        </div>
-        <div className="p-8 flex flex-col flex-grow relative">
-          <div className="absolute -top-10 right-8 w-16 h-16 bg-white rounded-2xl shadow-xl flex items-center justify-center rotate-6 border border-slate-50 transition-transform group-hover:rotate-12">
-            <Award className="w-8 h-8 text-orange-500" />
-          </div>
-          <h3 className="text-2xl font-black text-[#00263f] mb-3 leading-tight">{title}</h3>
-          <p className="text-slate-500 text-sm mb-6 flex-grow leading-relaxed">{description}</p>
-          <div className="flex items-center justify-between mt-auto">
-            <div className="flex items-center gap-2 text-orange-600 font-black text-sm">
-              <Clock className="w-4 h-4" />
-              {duration}
-            </div>
-          </div>
-          <button className="mt-8 w-full py-4 bg-[#F8FAFC] text-[#00263f] font-black rounded-2xl hover:bg-[#00263f] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest text-xs">
-            Course Module <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
+// --- Trust Logos ---
+const TrustStrip = () => (
+  <div className="py-20 border-y border-white/5 bg-navy-mid/50 relative">
+    <div className="max-w-7xl mx-auto px-6">
+      <div className="text-center text-[11px] font-bold text-slate-500 uppercase tracking-[0.3em] mb-12">
+        Approved & Recognized By Global Authorities
       </div>
-    </Card3D>
+      <div className="flex flex-wrap items-center justify-center gap-x-20 gap-y-12 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all duration-700">
+        {['ASNT', 'ISO 9001', 'QCI', 'NABL', 'SKILL INDIA', 'MSME', 'TWI'].map(brand => (
+          <div key={brand} className="text-2xl font-display font-bold whitespace-nowrap">{brand}</div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+// --- Course Card ---
+const CourseCard = ({ icon: Icon, title, desc, price, duration, type, accentColor = "gold" }: any) => (
+  <motion.div 
+     whileHover={{ y: -10 }}
+     className="glass-card bg-navy-mid/40 p-10 rounded-[2.5rem] border-white/5 group hover:border-gold/30 transition-all duration-500 flex flex-col h-full overflow-hidden relative"
+  >
+    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+       <Icon className="w-32 h-32" />
+    </div>
+    
+    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-8 bg-${accentColor}/10 border border-${accentColor}/20`}>
+      <Icon className={`w-7 h-7 text-${accentColor}`} />
+    </div>
+    
+    <div className="flex gap-1 mb-4">
+      {[1,2,3,4,5].map(s => <Star key={s} className="w-3 h-3 fill-gold text-gold" />)}
+    </div>
+    
+    <h3 className="text-2xl font-bold mb-4 group-hover:text-gold transition-colors">{title}</h3>
+    <p className="text-slate-400 text-sm leading-relaxed mb-8 flex-grow">{desc}</p>
+    
+    <div className="flex items-center gap-4 mb-8">
+      <div className="bg-white/5 px-4 py-1.5 rounded-full border border-white/10 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+        <Clock className="w-3 h-3 text-gold" /> {duration}
+      </div>
+      <div className="bg-white/5 px-4 py-1.5 rounded-full border border-white/10 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+        <Zap className="w-3 h-3 text-gold" /> {type}
+      </div>
+    </div>
+
+    <div className="pt-8 border-t border-white/5 flex items-center justify-between">
+      <div>
+        <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Full Certification</div>
+        <div className="text-2xl font-display font-black text-gold">₹{price}</div>
+      </div>
+      <a href="#admission" className="w-12 h-12 rounded-full glass-card border-white/20 flex items-center justify-center hover:bg-gold hover:text-navy-dark transition-all duration-300">
+        <ChevronRight className="w-5 h-5" />
+      </a>
+    </div>
   </motion.div>
 );
 
-const Feature = ({ icon: Icon, title, desc, index }: any) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+// --- Video Carousel ---
+const VideoCarousel = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scrollAmount, setScrollAmount] = useState(0);
+  const [maxScroll, setMaxScroll] = useState(0);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      setMaxScroll(containerRef.current.scrollWidth - containerRef.current.offsetWidth);
+    }
+  }, []);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (containerRef.current) {
+      const amount = 500;
+      const newScroll = direction === 'left' 
+        ? Math.max(0, scrollAmount - amount)
+        : Math.min(maxScroll, scrollAmount + amount);
+      
+      setScrollAmount(newScroll);
+      containerRef.current.scrollTo({ left: newScroll, behavior: 'smooth' });
+    }
+  };
+
+  const testimonials = [
+    { id: 1, name: "Mohammed Afzal", role: "Lead Inspector • Saudi Aramco", company: "Grade II Inspector", image: "https://images.unsplash.com/photo-1544717297-fa154da09f9d?auto=format&fit=crop&q=80&w=800" },
+    { id: 2, name: "Rahul S.", role: "QA/QC Manager • ADNOC", company: "Welding Specialist", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" },
+    { id: 3, name: "Arjun Prem", role: "NDT Specialist • Reliance", company: "Offshore Inspector", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800" },
+    { id: 4, name: "Kevin V.", role: "Safety Lead • Petrofac", company: "HSE Specialist", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=800" },
+    { id: 5, name: "Sameer N.", role: "NDT Level II • Shell", company: "Phased Array Expert", image: "https://images.unsplash.com/photo-1519085184581-b851b174ed10?auto=format&fit=crop&q=80&w=800" },
+  ];
 
   return (
-    <motion.div 
-      ref={ref}
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={isInView ? { opacity: 1, scale: 1 } : {}}
-      transition={{ delay: index * 0.1, type: "spring", stiffness: 100 }}
-      className="text-center group p-8 bg-white/50 backdrop-blur-sm rounded-[3rem] border border-white hover:bg-white hover:shadow-2xl hover:shadow-orange-200/20 transition-all duration-500"
-    >
-      <div className="w-20 h-20 bg-orange-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-orange-500/20 rotate-3 group-hover:rotate-12 transition-transform duration-500">
-        <Icon className="w-10 h-10 text-white" />
+    <div className="relative group">
+      <div 
+        ref={containerRef}
+        className="flex gap-8 overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth pb-12"
+      >
+        {testimonials.map((test) => (
+          <motion.div 
+            key={test.id}
+            className="min-w-[320px] md:min-w-[480px] snap-center relative"
+            whileHover={{ y: -10 }}
+          >
+            <div className="aspect-video bg-navy-mid rounded-[3rem] overflow-hidden border border-white/5 relative shadow-2xl transition-all duration-500 hover:border-gold/30">
+              <img 
+                src={test.image} 
+                className="w-full h-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-110 group-hover:opacity-20" 
+                alt={test.name} 
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div 
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-20 h-20 gold-gradient rounded-full flex items-center justify-center shadow-2xl cursor-pointer"
+                >
+                  <Play className="w-8 h-8 text-navy-dark fill-current translate-x-1" />
+                </motion.div>
+              </div>
+              <div className="absolute top-8 left-8">
+                 <div className="glass-card bg-navy-dark/60 px-5 py-2 rounded-full border-white/10">
+                    <span className="text-[10px] font-black text-white uppercase tracking-widest">Alumni Talk</span>
+                 </div>
+              </div>
+            </div>
+            <div className="mt-10 px-4">
+              <h4 className="text-white font-extrabold text-2xl mb-2 tracking-tight">{test.name}</h4>
+              <div className="text-gold text-xs font-bold uppercase tracking-widest mb-1">{test.role}</div>
+              <p className="text-slate-500 text-xs font-bold uppercase tracking-[0.2em]">{test.company}</p>
+            </div>
+          </motion.div>
+        ))}
       </div>
-      <h4 className="text-xl font-black text-[#00263f] mb-3 uppercase tracking-tighter">{title}</h4>
-      <p className="text-sm text-slate-500 leading-relaxed font-medium">{desc}</p>
-    </motion.div>
+
+      {/* Navigation Arrows */}
+      <div className="absolute -bottom-4 right-4 flex gap-4">
+        <button 
+          onClick={() => scroll('left')}
+          className="w-14 h-14 rounded-full glass-card flex items-center justify-center hover:bg-gold hover:text-navy-dark transition-all border-white/10"
+        >
+          <ChevronRight className="w-6 h-6 rotate-180" />
+        </button>
+        <button 
+          onClick={() => scroll('right')}
+          className="w-14 h-14 rounded-full glass-card flex items-center justify-center hover:bg-gold hover:text-navy-dark transition-all border-white/10"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+      </div>
+    </div>
   );
 };
 
-const FAQItem = ({ question, answer }: any) => {
+// --- FAQ Item ---
+const FAQItem = ({ q, a }: { q: string, a: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="mb-6">
+    <div className="border border-white/5 rounded-2xl overflow-hidden glass-card bg-navy-mid/20 transition-all duration-300">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full px-8 py-6 text-left flex justify-between items-center transition-all duration-300 rounded-[2rem] shadow-sm border ${
-          isOpen ? 'bg-white border-orange-200 shadow-xl shadow-orange-100/50' : 'bg-white/60 border-slate-100 hover:bg-white'
-        }`}
+        className="w-full flex items-center justify-between p-6 px-8 text-left hover:bg-gold/5 transition-colors"
       >
-        <span className={`text-lg font-bold transition-colors ${isOpen ? 'text-orange-600' : 'text-[#00263f]'}`}>{question}</span>
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isOpen ? 'bg-orange-500 text-white rotate-180' : 'bg-slate-100 text-slate-400'}`}>
-          <ChevronDown className="w-5 h-5" />
+        <span className="text-lg font-bold tracking-tight">{q}</span>
+        <div className={`w-8 h-8 rounded-full border border-white/10 flex items-center justify-center transition-transform duration-300 ${isOpen ? 'rotate-45 bg-gold/10 border-gold/30 text-gold' : ''}`}>
+          <ChevronRight className="w-5 h-5" />
         </div>
       </button>
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0, y: -10 }}
-            animate={{ height: 'auto', opacity: 1, y: 0 }}
-            exit={{ height: 0, opacity: 0, y: -10 }}
-            transition={{ type: "spring", duration: 0.5, bounce: 0 }}
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="px-10 py-8 text-slate-500 text-base leading-relaxed bg-white rounded-b-[2rem] -mt-4 pt-10 shadow-inner">
-              {answer}
+            <div className="p-8 pt-0 text-slate-400 leading-relaxed text-md font-medium border-t border-white/5">
+              {a}
             </div>
           </motion.div>
         )}
@@ -221,397 +447,389 @@ const FAQItem = ({ question, answer }: any) => {
   );
 };
 
-const FloatCircle = ({ className = "", delay = 0 }: { className?: string, delay?: number }) => (
-  <motion.div
-    animate={{ 
-      y: [0, -20, 0],
-      rotate: [0, 15, 0],
-      scale: [1, 1.05, 1]
-    }}
-    transition={{ 
-      duration: 5, 
-      repeat: Infinity, 
-      delay,
-      ease: "easeInOut" 
-    }}
-    className={`absolute rounded-full pointer-events-none opacity-20 blur-3xl ${className}`}
-  />
-);
-
+// --- Main App ---
 export default function App() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   return (
-    <div className="min-h-screen bg-[#FDFEFE] font-sans overflow-x-hidden selection:bg-orange-500 selection:text-white">
-      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-orange-500 origin-left z-[60]" style={{ scaleX }} />
+    <div className="relative min-h-screen bg-navy selection:bg-gold selection:text-navy-dark">
+      <motion.div className="fixed top-0 left-0 right-0 h-1 gold-gradient origin-left z-[999]" style={{ scaleX }} />
+      
+      <TopTicker />
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[95vh] flex items-center pt-32 pb-20 overflow-hidden bg-[#001D35]">
-        {/* Animated Background Elements */}
-        <FloatCircle className="w-[600px] h-[600px] bg-orange-500 -top-40 -left-60" delay={0} />
-        <FloatCircle className="w-[500px] h-[500px] bg-blue-400 -bottom-40 -right-40" delay={1} />
-        <div className="absolute inset-0 bg-[#001D35] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] opacity-40 pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-          <div className="grid lg:grid-cols-12 gap-16 items-center">
-            <div className="lg:col-span-7">
-              <motion.div
-                initial={{ opacity: 0, x: -100 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1, ease: "circOut" }}
-              >
-                <div className="flex items-center gap-3 mb-8">
-                  <span className="w-12 h-[2px] bg-orange-500" />
-                  <span className="text-orange-500 font-black tracking-[0.3em] uppercase text-xs">Industry Leader Since 2010</span>
-                </div>
-                <h1 className="text-5xl md:text-[5.5rem] font-black text-white leading-[0.9] mb-8 tracking-tighter drop-shadow-2xl">
-                  LEVEL UP <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">INSPECTION</span> CAREERS
-                </h1>
-                <p className="text-xl text-slate-300 leading-relaxed mb-12 max-w-xl font-medium opacity-80 italic">
-                  Premium certification for the specialized world of Oil & Gas engineering. Validated globally. Built for excellence.
-                </p>
-                <div className="flex flex-wrap gap-6">
-                  <motion.button 
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-orange-500 text-white px-12 py-5 rounded-[2rem] font-black text-lg shadow-2xl shadow-orange-500/30 flex items-center gap-3 transition-shadow hover:shadow-orange-500/50"
-                  >
-                    <Phone className="w-6 h-6" /> ADMISSIONS OPEN
-                  </motion.button>
-                  <motion.button 
-                    whileHover={{ backgroundColor: "rgba(255,255,255,0.15)" }}
-                    className="bg-white/10 text-white backdrop-blur-xl px-12 py-5 rounded-[2rem] font-black text-lg border border-white/20 flex items-center gap-3"
-                  >
-                    BROCHURE 2024
-                  </motion.button>
-                </div>
-              </motion.div>
+      <Hero />
+      
+      <TrustStrip />
+
+      {/* 4. Courses Section */}
+      <section id="courses" className="py-40 relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-24">
+            <div>
+              <SectionLabel>Our Programs</SectionLabel>
+              <SectionTitle accent="Courses">Industry-Leading</SectionTitle>
+              <SectionSub>Comprehensive training designed by industry veterans. Get certified and job-ready in 45 days.</SectionSub>
             </div>
+            <a href="#admission" className="glass-card px-8 py-3 rounded-full text-sm font-bold border-white/10 hover:border-gold/30 transition-all mb-12 md:mb-0">
+               View All Programs →
+            </a>
+          </div>
 
-            <div className="lg:col-span-5">
-              <motion.div
-                initial={{ opacity: 0, y: 100, rotateY: 15 }}
-                animate={{ opacity: 1, y: 0, rotateY: 0 }}
-                transition={{ duration: 1, delay: 0.2, ease: "circOut" }}
-                className="relative"
-              >
-                {/* Decorative 3D Elements */}
-                <motion.div 
-                  animate={{ y: [0, -15, 0], rotate: [0, 10, 0] }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                  className="absolute -top-12 -right-8 w-24 h-24 bg-white/10 backdrop-blur-3xl rounded-3xl border border-white/20 z-20 flex items-center justify-center rotate-12"
-                >
-                  <Star className="text-orange-500 w-10 h-10 fill-orange-500" />
-                </motion.div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <CourseCard 
+              icon={Microscope}
+              title="NDT Level II Course"
+              desc="Master ultrasonic, radiographic, magnetic particle, and liquid penetrant testing methods."
+              price="35,000"
+              duration="45 Days"
+              type="Professional"
+            />
+            <CourseCard 
+              icon={ShieldCheck}
+              title="QA/QC Course"
+              desc="Quality assurance for civil, mechanical, and welding projects globally."
+              price="35,000"
+              duration="30 Days"
+              type="Certified"
+            />
+            <CourseCard 
+              icon={HardHat}
+              title="Fire & Safety"
+              desc="International industrial safety standards for hazardous oil & gas environments."
+              price="45,000"
+              duration="3 Months"
+              type="Safety Specialist"
+            />
+          </div>
+        </div>
+      </section>
 
-                <div className="bg-white/95 backdrop-blur-2xl p-10 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border border-white/50">
-                  <div className="mb-10 text-center">
-                    <h3 className="text-3xl font-black text-[#00263f] mb-2 tracking-tighter uppercase">Quick Access</h3>
-                    <p className="text-slate-400 text-sm font-bold opacity-60">Join 10,000+ Alumni World Wide</p>
-                  </div>
-                  <form className="space-y-6">
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-black text-[#00263f] uppercase tracking-widest pl-4">Full Name</label>
-                      <input type="text" placeholder="John Doe" className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-orange-500 transition-all font-bold text-slate-800" />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-black text-[#00263f] uppercase tracking-widest pl-4">Contact Phone</label>
-                      <input type="tel" placeholder="+91 99999 999" className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-orange-500 transition-all font-bold text-slate-800" />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-black text-[#00263f] uppercase tracking-widest pl-4">Course Choice</label>
-                      <div className="relative">
-                        <select className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-orange-500 transition-all font-bold text-slate-800 appearance-none cursor-pointer">
-                          <option>NDT Level 2 (Elite)</option>
-                          <option>Radiographic Expert</option>
-                          <option>Ultrasonic Specialist</option>
-                        </select>
-                        <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+      {/* 5. Why Choose Us */}
+      <section id="why-us" className="py-40 bg-navy-mid/40">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-24 items-center">
+             <div className="relative">
+                <div className="aspect-square glass-card bg-navy-light/60 rounded-[3rem] p-12 flex flex-col justify-center gap-8 relative z-10">
+                   <div className="grid grid-cols-2 gap-8">
+                     {[
+                       { n: "10K+", l: "Students Trained" },
+                       { n: "100%", l: "Placement Rate" },
+                       { n: "50+", l: "Industry Partners" },
+                       { n: "15+", l: "Years Excellence" }
+                     ].map((s, i) => (
+                       <div key={i} className="glass-card p-8 rounded-3xl border-white/5 relative overflow-hidden group">
+                          <div className="text-4xl font-black text-gold mb-2">{s.n}</div>
+                          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.l}</div>
+                          <div className="absolute bottom-0 left-0 h-1 w-0 bg-gold transition-all group-hover:w-full" />
+                       </div>
+                     ))}
+                   </div>
+                   
+                   <div className="space-y-4">
+                      <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-slate-500">
+                        <span>Success Rate</span>
+                        <span className="text-gold">98%</span>
                       </div>
-                    </div>
-                    <button className="w-full bg-[#00263f] text-white py-5 rounded-2xl font-black uppercase tracking-widest text-sm shadow-2xl hover:bg-orange-500 transition-all group overflow-hidden relative">
-                      <span className="relative z-10">Start Career Now</span>
-                      <motion.div className="absolute inset-0 bg-orange-500 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out" />
-                    </button>
-                  </form>
+                      <div className="h-3 bg-white/5 rounded-full overflow-hidden p-0.5">
+                        <motion.div 
+                           initial={{ width: 0 }}
+                           whileInView={{ width: '98%' }}
+                           transition={{ duration: 1.5, delay: 0.5 }}
+                           className="h-full gold-gradient rounded-full" 
+                        />
+                      </div>
+                   </div>
                 </div>
-              </motion.div>
-            </div>
+                {/* Visual accents */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gold/5 blur-[120px] rounded-full pointer-events-none" />
+             </div>
+             
+             <div>
+                <SectionLabel>Why Choose Us</SectionLabel>
+                <SectionTitle accent="Trusted">India's Most</SectionTitle>
+                <SectionSub>We don't just teach — we transform careers. Our track record speaks for itself with global success stories.</SectionSub>
+                
+                <div className="space-y-8 mt-12">
+                   {[
+                     { i:Zap, t: "Expert Industry Faculty", d: "Learn from veterans with 15+ years of real-world Gulf and domestic experience." },
+                     { i:Microscope, t: "World-Class Labs", d: "Hands-on training with actual industrial UT/RT equipment in every session." },
+                     { i:Target, t: "Global Network", d: "Direct recruitment links with MNCs in UAE, Saudi Arabia, and Europe." }
+                   ].map((f, i) => (
+                     <div key={i} className="flex gap-6 group">
+                        <div className="w-14 h-14 rounded-2xl glass-card flex items-center justify-center shrink-0 group-hover:bg-gold/10 transition-colors">
+                           <f.i className="w-7 h-7 text-gold" />
+                        </div>
+                        <div>
+                           <h4 className="text-xl font-bold mb-2 tracking-tight group-hover:text-gold transition-colors">{f.t}</h4>
+                           <p className="text-slate-400 text-sm leading-relaxed">{f.d}</p>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust Metrics with Floating Effect */}
-      <section className="relative z-20 -mt-16 mb-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-white/80 backdrop-blur-3xl rounded-[3rem] shadow-[0_32px_64px_-16px_rgba(0,38,63,0.1)] border border-white p-8 grid md:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-            <div className="flex flex-col items-center justify-center text-center p-4">
-              <div className="text-4xl font-black text-orange-500 mb-1">4.8</div>
-              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Google Stars</div>
-            </div>
-            <div className="flex flex-col items-center justify-center text-center p-4">
-              <div className="text-4xl font-black text-[#00263f] mb-1">ISO</div>
-              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Standard 9001</div>
-            </div>
-            <div className="flex flex-col items-center justify-center text-center p-4">
-              <div className="text-4xl font-black text-[#00263f] mb-1">10k+</div>
-              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Certified</div>
-            </div>
-            <div className="flex flex-col items-center justify-center text-center p-4">
-              <div className="text-4xl font-black text-[#00263f] mb-1">50+</div>
-              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Ties</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Courses Section */}
-      <section id="courses" className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="max-w-3xl mb-24">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+      {/* 6. Placement Guarantee Section */}
+      <section id="placement" className="py-40 relative">
+         <div className="max-w-5xl mx-auto px-6">
+            <motion.div 
+               whileInView={{ scale: [0.95, 1], opacity: [0, 1] }}
+               className="glass-card bg-navy-mid p-16 rounded-[4rem] text-center relative overflow-hidden backdrop-blur-3xl border-gold/10"
             >
-              <h2 className="text-5xl font-black text-[#00263f] mb-6 tracking-tighter leading-none">
-                PREMIUM <span className="text-orange-500">TRAINING</span> PATHS
-              </h2>
-              <p className="text-slate-500 text-lg font-medium leading-relaxed">
-                Unlock the most sought-after skillsets in the heavy industry. Our courses are optimized for rapid career advancement.
-              </p>
+               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-gold/10 rounded-full blur-[80px]" />
+               
+               <div className="text-6xl md:text-9xl font-black text-gold mb-4 leading-none tracking-tighter">100%</div>
+               <h2 className="text-3xl md:text-5xl font-black mb-8 tracking-tight">Placement Guarantee</h2>
+               <p className="text-slate-400 text-lg max-w-2xl mx-auto mb-12">We guarantee 100% job placement for all certified graduates. If you don't secure a role, we re-train you at no extra cost until you are hired.</p>
+               
+               <div className="flex flex-wrap gap-8 justify-center items-center opacity-30">
+                  {["Aramco", "L&T", "ONGC", "Reliance", "ADNOC", "Petronas"].map(b => (
+                    <span key={b} className="text-2xl font-display font-bold">{b}</span>
+                  ))}
+               </div>
             </motion.div>
-          </div>
+         </div>
+      </section>
 
-          <div className="grid md:grid-cols-3 gap-12">
-            <CourseCard 
-              index={0}
-              image="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800"
-              title="NDT LEVEL 2 COMBO"
-              description="Master the core 4: Visual, Penetrant, Magnetic, and Ultrasonic inspection methods."
-              duration="7 Weeks Professional"
-              isBestSeller
-            />
-            <CourseCard 
-              index={1}
-              image="https://images.unsplash.com/photo-1531945086322-64e2ffae14a6?auto=format&fit=crop&q=80&w=800"
-              title="ULTRASONIC ELITE"
-              description="Learn phased-array and digital flaw detection for high-pressure industrial systems."
-              duration="3 Weeks Intensive"
-            />
-            <CourseCard 
-              index={2}
-              image="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=800"
-              title="X-RAY SPECIALIST"
-              description="Become a certified radiographer. Full radiation safety and film interpretation mastery."
-              duration="4 Weeks Expert"
-            />
+      {/* 8. Voices of Success (Carousel) */}
+      <section className="py-40 bg-navy-mid/40">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <SectionLabel>Voices of Success</SectionLabel>
+            <SectionTitle accent="Stories">Student</SectionTitle>
+            <p className="section-sub mx-auto">Real stories from our students who made it from the classroom to international sites.</p>
           </div>
+          <VideoCarousel />
         </div>
       </section>
 
-      {/* Why Us with Grid Background */}
-      <section className="py-32 bg-slate-50 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: "radial-gradient(#00263f 2px, transparent 2px)", backgroundSize: "40px 40px" }} />
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 lg:grid-cols-4 gap-12">
-            <Feature index={0} icon={GraduationCap} title="Field Vets" desc="Mentors with decades of experience in Kuwait, Saudi & Gulf projects." />
-            <Feature index={1} icon={Microscope} title="Sim Labs" desc="Train on the exact equipment used in offshore rigs and refineries." />
-            <Feature index={2} icon={Briefcase} title="Career Hub" desc="Exclusive hiring access to top tier EPC contractors globally." />
-            <Feature index={3} icon={FileCheck} title="Govt Regs" desc="Certifications recognized by major world-wide safety boards." />
-          </div>
-        </div>
-      </section>
-
-      {/* Success Story / Spotlight */}
-      <section className="py-40 relative">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-[#00263f] rounded-[4rem] p-12 lg:p-24 text-white relative overflow-hidden shadow-[0_60px_120px_-20px_rgba(0,38,63,0.4)]">
-            <div className="absolute top-0 right-0 w-1/3 h-full bg-orange-500 skew-x-12 translate-x-1/2 opacity-10" />
-            
-            <div className="grid lg:grid-cols-2 gap-20 items-center relative z-10">
-              <div className="relative">
-                <motion.div 
-                  style={{ perspective: "2000px" }}
-                  whileHover={{ rotateY: -10, rotateX: 5 }}
-                  className="rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/10"
-                >
-                  <img 
-                    src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=800" 
-                    alt="Success Story" 
-                    className="w-full aspect-[4/5] object-cover"
-                  />
+      {/* 9. Faculty Section */}
+      <section id="instructors" className="py-40">
+        <div className="max-w-7xl mx-auto px-6">
+           <div className="text-center mb-24">
+              <SectionLabel>Our Faculty</SectionLabel>
+              <SectionTitle accent="Experts">Learn From</SectionTitle>
+           </div>
+           
+           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+              {[
+                { n: "Feroz Alam", r: "Lead Trainer", c: "15+ Yrs Exp", i: "FA" },
+                { n: "Tabrej Alam", r: "Senior Expert", c: "12+ Yrs Exp", i: "TA" },
+                { n: "MD Javed", r: "NDT Specialist", c: "10+ Yrs Exp", i: "MJ" },
+                { n: "Deepak Kumar", r: "Tech Lead", c: "Certified Level III", i: "DK" }
+              ].map((m, i) => (
+                <motion.div key={i} whileHover={{ y: -8 }} className="glass-card p-10 rounded-[2.5rem] text-center group border-white/5 hover:border-gold/30 transition-all">
+                   <div className="w-24 h-24 rounded-full gold-gradient flex items-center justify-center font-display font-black text-3xl text-navy-dark mx-auto mb-8 shadow-2xl group-hover:scale-110 transition-transform">
+                      {m.i}
+                   </div>
+                   <h4 className="text-xl font-bold mb-2 tracking-tight">{m.n}</h4>
+                   <div className="text-gold text-[10px] font-bold uppercase tracking-widest mb-4">{m.r}</div>
+                   <div className="bg-white/5 py-2 rounded-xl text-[10px] font-bold text-slate-500 uppercase tracking-widest border border-white/5">{m.c}</div>
                 </motion.div>
-                <motion.div 
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="absolute -bottom-10 -right-10 bg-orange-500 px-10 py-10 rounded-[3rem] text-white shadow-3xl text-center"
-                >
-                  <div className="text-5xl font-black mb-1 leading-none tracking-tighter">3x</div>
-                  <div className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80">Salary Jump</div>
-                </motion.div>
-              </div>
-
-              <div>
-                <motion.div
-                  initial={{ opacity: 0, x: 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <span className="text-orange-500 font-black uppercase tracking-widest text-xs mb-8 block underline underline-offset-8">Alumni Spotlight</span>
-                  <h2 className="text-5xl lg:text-7xl font-black mb-12 leading-[0.95] tracking-tighter">THE FASTEST ROUTE TO <span className="text-orange-500">EXPERT</span> STATUS</h2>
-                  <div className="space-y-12">
-                    <div className="relative pl-12 border-l-2 border-orange-500/50">
-                      <p className="text-2xl font-medium italic text-slate-300 leading-relaxed mb-8">
-                        "NDT Certify didn't just teach me the technicals; they taught me how to survive and thrive in international field teams. Within 2 years, I'm already leading a team in ADNOC."
-                      </p>
-                      <div>
-                        <div className="text-2xl font-black tracking-tight">RAHUL SHARMA</div>
-                        <div className="text-orange-500 font-bold text-sm tracking-widest uppercase">Senior Lead Inspector • Abu Dhabi</div>
-                      </div>
-                    </div>
-                    <motion.button 
-                      whileHover={{ x: 10 }}
-                      className="bg-white text-[#00263f] px-12 py-5 rounded-[2rem] font-black text-lg flex items-center gap-4 group"
-                    >
-                      READ HIS FULL CASE STUDY <ChevronRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-                    </motion.button>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </div>
+              ))}
+           </div>
         </div>
       </section>
 
-      {/* FAQ with Modern Accordion */}
-      <section className="py-40 bg-slate-50/50">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-24">
-            <h2 className="text-5xl font-black text-[#00263f] tracking-tighter mb-6 uppercase">Transparency Center</h2>
-            <p className="text-slate-500 font-bold text-sm tracking-widest">EVERYTHING YOU NEED TO KNOW ABOUT CERTIFICATION</p>
-          </div>
-          
-          <div className="space-y-4">
-            <FAQItem 
-              question="What are the basic eligibility requirements?" 
-              answer="We look for candidates with a technical mindset. While an Engineering Diploma/Degree is preferred, we have specialized bridge courses for enthusiastic school graduates with industrial exposure."
-            />
-            <FAQItem 
-              question="Is my certificate valid in the USA and Gulf?" 
-              answer="Absolutely. All our training modules follow ASNT Level II standards (American Society for Non-destructive Testing), ensuring your qualification is accepted by every major oil field in the world."
-            />
-            <FAQItem 
-              question="Do you help with visas and international jobs?" 
-              answer="Yes, our Placement Cell works directly with staffing partners in UAE, Qatar, and Saudi Arabia to fast-track our high-performing alumni into open field roles."
-            />
-          </div>
+      {/* 11. FAQ Section */}
+      <section id="faq" className="py-40 bg-navy-mid/40">
+        <div className="max-w-4xl mx-auto px-6">
+           <div className="text-center mb-24">
+              <SectionLabel>Support</SectionLabel>
+              <SectionTitle accent="Questions">Common</SectionTitle>
+           </div>
+           
+           <div className="space-y-4">
+              <FAQItem q="What is the average salary after NDT certification?" a="Certified Level II professionals starting in India typically earn ₹40K-₹70K, while Gulf rotations offer ₹1.5L to ₹3L monthly depending on the specific inspection field." />
+              <FAQItem q="Is it mandatory to have an engineering degree?" a="No. While B.Tech/Diploma is preferred, technical school graduates with field mindset can excel. Industry certifications often outweigh academic degrees in the Gulf." />
+              <FAQItem q="Are the certificates valid internationally?" a="Absolutely. We train according to ASNT and ISO standards, making our certificates valid and respected in UAE, Saudi Arabia, Europe, and beyond." />
+              <FAQItem q="Do you provide hostel facilities for outstation students?" a="Yes, we assist outstation students with premium, safe, and hygienic accommodation options near our Noida facility." />
+           </div>
         </div>
       </section>
 
-      {/* Immersive CTA */}
-      <section className="py-40">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-[5rem] p-16 lg:p-32 text-center relative overflow-hidden shadow-[0_80px_100px_-30px_rgba(255,107,0,0.3)]"
-          >
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
-            <h2 className="text-6xl lg:text-[7rem] font-black text-white leading-[0.8] mb-16 tracking-tighter drop-shadow-lg">
-              READY FOR THE <br /> <span className="opacity-40">BIG LEAGUE?</span>
-            </h2>
-            <div className="flex flex-col md:flex-row gap-8 justify-center">
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                className="bg-white text-orange-600 px-16 py-7 rounded-[2.5rem] font-black text-xl shadow-3xl flex items-center justify-center gap-4"
-              >
-                <Phone className="w-7 h-7" /> TALK TO ADVISORS
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                className="bg-[#21C063] text-white px-16 py-7 rounded-[2.5rem] font-black text-xl shadow-3xl flex items-center justify-center gap-4"
-              >
-                <MessageCircle className="w-7 h-7" /> WHATSAPP CHAT
-              </motion.button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Futuristic Footer */}
-      <footer className="bg-[#001D35] text-white pt-40 pb-20 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-orange-500 via-white/20 to-orange-500" />
-        
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-24 mb-32">
-            <div className="md:col-span-1">
-              <div className="flex items-center gap-3 mb-10">
-                <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center shrink-0">
-                  <ShieldCheck className="text-white w-5 h-5" />
+      {/* 12. Admission Section */}
+      <section id="admission" className="py-40 relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-24 items-center">
+             <div>
+                <SectionLabel>Admission Process</SectionLabel>
+                <SectionTitle accent="Journey">Start Your</SectionTitle>
+                <SectionSub>Get from classroom to site in 3 simple steps. Our team handles your documentation and placement prep.</SectionSub>
+                
+                <div className="space-y-12 mt-12 relative">
+                   <div className="absolute left-[27px] top-4 bottom-4 w-[1px] bg-gradient-to-b from-gold via-gold/20 to-transparent" />
+                   {[
+                     { n: "01", t: "Free Counselling", d: "Consult with our experts to pick the right path for your career goals." },
+                     { n: "02", t: "Hands-on Training", d: "Experience intensive lab and theory sessions with actual equipment." },
+                     { n: "03", t: "Global Hired", d: "Crack interviews with our dedicated recruitment team support." }
+                   ].map((s, i) => (
+                     <div key={i} className="flex gap-10 relative">
+                        <div className="w-14 h-14 rounded-full gold-gradient text-navy-dark flex items-center justify-center font-display font-black text-xl shrink-0 shadow-lg relative z-10">
+                           {s.n}
+                        </div>
+                        <div>
+                           <h4 className="text-xl font-bold mb-2 tracking-tight">{s.t}</h4>
+                           <p className="text-slate-500 text-sm">{s.d}</p>
+                        </div>
+                     </div>
+                   ))}
                 </div>
-                <span className="text-2xl font-black tracking-tighter uppercase whitespace-nowrap">World Wide NDT Institute</span>
+             </div>
+             
+             <div className="glass-card bg-navy-mid/60 p-12 rounded-[3.5rem] border-white/10 shadow-3xl">
+                <h3 className="text-3xl font-bold mb-2 tracking-tight">Apply Online</h3>
+                <p className="text-slate-500 text-sm mb-10">Limited seats for the upcoming batch. Apply today.</p>
+                
+                <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                   <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                         <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-2">Full Name</label>
+                         <input type="text" className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:border-gold outline-none text-sm transition-all" placeholder="John Doe" />
+                      </div>
+                      <div className="space-y-2">
+                         <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-2">Phone</label>
+                         <input type="tel" className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:border-gold outline-none text-sm transition-all" placeholder="+91" />
+                      </div>
+                   </div>
+                   <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-2">Interested Course</label>
+                      <select className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:border-gold outline-none text-sm transition-all appearance-none cursor-pointer">
+                         <option className="bg-navy-dark">NDT Level II Course</option>
+                         <option className="bg-navy-dark">QA/QC Course</option>
+                         <option className="bg-navy-dark">Fire & Safety</option>
+                      </select>
+                   </div>
+                   <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-2">Message (Optional)</label>
+                      <textarea className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:border-gold outline-none text-sm transition-all h-32 resize-none" placeholder="Write your query..." />
+                   </div>
+                   <button className="w-full py-5 rounded-2xl gold-gradient text-navy-dark font-extrabold text-lg shadow-xl shadow-gold/20 hover:scale-[1.02] active:scale-[0.98] transition-all mt-4">
+                      Submit Application
+                   </button>
+                   <p className="text-center text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-6">
+                      🔒 Your data is secure with ISO standard systems
+                   </p>
+                </form>
+             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <div className="max-w-7xl mx-auto px-6 mb-40">
+        <motion.div 
+           whileHover={{ scale: 1.01 }}
+           className="gold-gradient p-1 bg-white rounded-[4rem] group"
+        >
+           <div className="bg-navy-dark rounded-[3.8rem] p-16 lg:p-24 flex flex-col md:flex-row items-center justify-between gap-12 overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[100px] group-hover:scale-150 transition-transform duration-1000" />
+              <div className="relative z-10 max-w-xl text-center md:text-left">
+                 <h2 className="text-4xl lg:text-6xl font-black mb-6 leading-tight tracking-tight">Final Countdown <br /> <span className="gold-text">Join The Best</span></h2>
+                 <p className="text-slate-400 text-lg">Stop just searching. Start achieving. Connect with our advisors and map your 5-year career growth today.</p>
               </div>
-              <p className="text-slate-400 font-medium leading-relaxed mb-10 text-base">
-                Global precision certification center for Non-Destructive Testing. Validated by industry veterans for the next generation of engineers.
-              </p>
-              <div className="flex gap-4">
-                {[Facebook, Twitter, Instagram, Linkedin].map((Icon, idx) => (
-                  <a key={idx} href="#" className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-orange-500 transition-all border border-white/10 hover:border-orange-400">
-                    <Icon className="w-5 h-5" />
-                  </a>
-                ))}
+              <div className="flex flex-col gap-4 relative z-10">
+                 <a href="#admission" className="gold-gradient text-navy-dark px-12 py-5 rounded-full font-bold text-xl text-center shadow-2xl hover:scale-105 transition-transform">Get Started Today</a>
+                 <div className="flex items-center gap-6 justify-center">
+                    <div className="flex -space-x-3">
+                       {[1,2,3].map(i => <div key={i} className="w-10 h-10 rounded-full border-2 border-navy-dark bg-slate-700" />)}
+                    </div>
+                    <span className="text-xs font-bold text-slate-400">Join 100+ Enrolled This Week</span>
+                 </div>
               </div>
-            </div>
+           </div>
+        </motion.div>
+      </div>
 
-            <div>
-              <h4 className="text-orange-500 font-black uppercase tracking-widest text-xs mb-10">Certification Paths</h4>
-              <ul className="space-y-5">
-                {['NDT Level II Expert', 'Phased Array UT', 'Digital Radiography', 'Welding Inspection', 'Safety Audits'].map(link => (
-                  <li key={link}><a href="#" className="text-slate-300 font-bold hover:text-white transition-colors flex items-center gap-3 group"><span className="w-1.5 h-1.5 bg-orange-500 rounded-full group-hover:scale-150 transition-transform" /> {link}</a></li>
-                ))}
-              </ul>
-            </div>
+      {/* Footer */}
+      <footer className="bg-navy-dark pt-32 pb-12 border-t border-white/5 relative overflow-hidden">
+        {/* Accents */}
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gold/5 blur-[120px] rounded-full" />
+        
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-20 mb-24">
+             <div className="lg:col-span-1">
+                <a href="#" className="flex items-center gap-3 mb-10 group">
+                  <div className="w-10 h-10 gold-gradient rounded-xl flex items-center justify-center font-display font-extrabold text-navy-dark text-md shadow-lg group-hover:rotate-6 transition-transform">
+                    WW<br/>NDT
+                  </div>
+                  <div>
+                    <span className="text-lg font-bold tracking-tighter block leading-none">WORLD WIDE</span>
+                    <span className="text-[8px] uppercase font-black tracking-widest text-gold text-center">NDT Institute</span>
+                  </div>
+                </a>
+                <p className="text-slate-500 text-sm leading-relaxed mb-10 max-w-xs">India's premier institute for NDT training and industrial safety. Setting global benchmarks in certification excellence.</p>
+                <div className="flex gap-4">
+                  {[Facebook, Twitter, Instagram, Youtube].map((Icon, i) => (
+                    <a key={i} href="#" className="w-10 h-10 rounded-xl glass-card border-white/10 flex items-center justify-center hover:bg-gold hover:text-navy-dark transition-all duration-300">
+                      <Icon className="w-5 h-5" />
+                    </a>
+                  ))}
+                </div>
+             </div>
 
-            <div>
-              <h4 className="text-orange-500 font-black uppercase tracking-widest text-xs mb-10">Global Access</h4>
-              <ul className="space-y-5">
-                {['Direct Hire Portal', 'Expatriate Visa Help', 'Alumni Network', 'Lab Facilities', 'Corporate Training'].map(link => (
-                  <li key={link}><a href="#" className="text-slate-300 font-bold hover:text-white transition-colors">{link}</a></li>
-                ))}
-              </ul>
-            </div>
+             <div className="space-y-8">
+                <h5 className="text-[11px] font-black uppercase tracking-[0.3em] text-gold">Programs</h5>
+                <ul className="space-y-4">
+                   {["NDT Level II Certification", "QA/QC Civil Engineer", "Radiographic Inspection", "MT & PT Masterclass", "NDT Combo Pack"].map(l => (
+                     <li key={l}><a href="#" className="text-sm font-bold text-slate-400 hover:text-white transition-colors">{l}</a></li>
+                   ))}
+                </ul>
+             </div>
 
-            <div>
-              <h4 className="text-orange-500 font-black uppercase tracking-widest text-xs mb-10">Headquarters</h4>
-              <ul className="space-y-8">
-                <li className="flex gap-4 items-start">
-                  <MapPin className="w-6 h-6 text-white shrink-0 mt-1" />
-                  <span className="text-slate-300 font-medium">Cyber Hub Tower II, Floor 14, <br /> NCR Region • India</span>
-                </li>
-                <li className="flex gap-4 items-center">
-                  <Mail className="w-6 h-6 text-white shrink-0" />
-                  <span className="text-slate-300 font-bold">global@ndtcertify.com</span>
-                </li>
-              </ul>
-            </div>
+             <div className="space-y-8">
+                <h5 className="text-[11px] font-black uppercase tracking-[0.3em] text-gold">Company</h5>
+                <ul className="space-y-4">
+                   {["About Our Institute", "Meet The Faculty", "Placement Track", "Success Stories", "Scholarship Docs"].map(l => (
+                     <li key={l}><a href="#" className="text-sm font-bold text-slate-400 hover:text-white transition-colors">{l}</a></li>
+                   ))}
+                </ul>
+             </div>
+
+             <div className="space-y-8">
+                <h5 className="text-[11px] font-black uppercase tracking-[0.3em] text-gold">Headquarters</h5>
+                <ul className="space-y-5">
+                   <li className="flex gap-4 items-start">
+                      <MapPin className="w-5 h-5 text-gold shrink-0 mt-1" />
+                      <span className="text-sm text-slate-400 font-medium">Global Plaza Complex, <br /> Sector 135, Noida, UP • India</span>
+                   </li>
+                   <li className="flex gap-4 items-center">
+                      <Phone className="w-5 h-5 text-gold shrink-0" />
+                      <span className="text-sm text-slate-400 font-bold">+91 72900 95961</span>
+                   </li>
+                   <li className="flex gap-4 items-center">
+                      <Mail className="w-5 h-5 text-gold shrink-0" />
+                      <span className="text-sm text-slate-400 font-bold">info@ndtis.in</span>
+                   </li>
+                </ul>
+             </div>
           </div>
           
-          <div className="pt-20 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-slate-500 text-sm font-black uppercase tracking-widest">
-              © {new Date().getFullYear()} World Wide NDT Institute  • PRECISION ENGINEERED
-            </div>
-            <div className="flex gap-8 text-slate-500 text-xs font-bold uppercase tracking-widest">
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Safety Code</a>
-              <a href="#" className="hover:text-white transition-colors">Liability</a>
-            </div>
+          <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+             <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">© 2024 WORLD WIDE NDT INSTITUTE & SERVICES • ALL RIGHTS RESERVED</p>
+             <div className="flex gap-10">
+                {["Privacy", "Liability", "Standards"].map(l => (
+                  <a key={l} href="#" className="text-[10px] font-bold text-slate-600 uppercase tracking-widest hover:text-gold transition-colors">{l}</a>
+                ))}
+             </div>
           </div>
         </div>
       </footer>
+
+      {/* WhatsApp Static Action */}
+      <motion.a 
+        href="https://wa.me/917290095961"
+        target="_blank"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        className="fixed bottom-10 right-10 z-[100] w-16 h-16 bg-[#25D366] rounded-full shadow-[0_12px_48px_rgba(37,211,102,0.4)] flex items-center justify-center text-white"
+      >
+        <MessageCircle size={32} />
+      </motion.a>
     </div>
   );
 }
