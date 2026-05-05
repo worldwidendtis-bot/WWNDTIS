@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { 
   Phone, 
   Mail, 
@@ -24,9 +24,88 @@ import {
   Target,
   Trophy,
   Microscope,
-  MessageCircle
+  MessageCircle,
+  ArrowRight
 } from 'lucide-react';
-import { motion, AnimatePresence, useScroll, useSpring, useInView } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring, useInView, useMotionValue } from 'motion/react';
+
+// --- Custom Cursor ---
+const CustomCursor = () => {
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const dotX = useMotionValue(-100);
+  const dotY = useMotionValue(-100);
+
+  const [isHovering, setIsHovering] = useState(false);
+
+  const springConfig = { damping: 25, stiffness: 200 };
+  const springX = useSpring(cursorX, springConfig);
+  const springY = useSpring(cursorY, springConfig);
+
+  useEffect(() => {
+    const moveCursor = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+      dotX.set(e.clientX);
+      dotY.set(e.clientY);
+    };
+
+    const handleHover = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      setIsHovering(!!target.closest('a, button, .cursor-pointer'));
+    };
+
+    window.addEventListener('mousemove', moveCursor);
+    window.addEventListener('mouseover', handleHover);
+    return () => {
+      window.removeEventListener('mousemove', moveCursor);
+      window.removeEventListener('mouseover', handleHover);
+    };
+  }, [cursorX, cursorY, dotX, dotY]);
+
+  return (
+    <>
+      <motion.div 
+        className="custom-cursor bg-white/5 backdrop-blur-sm"
+        animate={{ 
+          scale: isHovering ? 2.5 : 1,
+          borderColor: isHovering ? 'rgba(249, 178, 51, 0.5)' : 'rgba(249, 178, 51, 1)'
+        }}
+        style={{ left: springX, top: springY }}
+      />
+      <motion.div 
+        className="cursor-dot"
+        animate={{ scale: isHovering ? 0 : 1 }}
+        style={{ left: dotX, top: dotY }}
+      />
+    </>
+  );
+};
+
+// --- Kinetic Text ---
+const KineticText = ({ text, className }: { text: string, className?: string }) => {
+  const words = text.split(' ');
+  return (
+    <h1 className={className}>
+      {words.map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden mr-[0.2em] pb-[0.1em]">
+          <motion.span
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            transition={{ 
+              duration: 1, 
+              ease: [0.16, 1, 0.3, 1],
+              delay: i * 0.1 
+            }}
+            className="inline-block"
+          >
+            {word}
+          </motion.span>
+        </span>
+      ))}
+    </h1>
+  );
+};
 
 // --- Global UI Components ---
 
@@ -51,15 +130,16 @@ const SectionSub = ({ children }: { children: React.ReactNode }) => (
 
 // --- Ticker ---
 const TopTicker = () => (
-  <div className="bg-gold h-10 flex items-center overflow-hidden whitespace-nowrap z-[100] relative">
+  <div className="bg-navy-mid/40 backdrop-blur-md border-b border-white/5 h-10 flex items-center overflow-hidden whitespace-nowrap z-[100] relative">
     <motion.div
       animate={{ x: ["0%", "-50%"] }}
-      transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-      className="flex gap-16 items-center px-4"
+      transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+      className="flex gap-20 items-center px-4"
     >
       {Array(10).fill(null).map((_, i) => (
-        <span key={i} className="text-[11px] font-bold text-navy-dark uppercase tracking-widest flex items-center gap-4">
-          🏆 India's #1 NDT Training Institute • 100% Placement Guarantee • Admissions Open for May 2024 Batch
+        <span key={i} className="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] flex items-center gap-6">
+          <span className="w-1 h-1 bg-gold rounded-full shadow-[0_0_8px_rgba(249,178,51,0.5)]" />
+          India's #1 NDT Training Institute • 100% Placement Guarantee • Admissions Open for May 2024 Batch
         </span>
       ))}
     </motion.div>
@@ -80,41 +160,36 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed top-10 left-0 right-0 z-50 transition-all duration-500 px-6 sm:px-12 ${
-        isScrolled ? 'top-0 py-4' : 'py-8'
+        isScrolled ? 'top-0 py-3' : 'py-6'
       }`}
     >
-      <div className={`max-w-7xl mx-auto flex items-center justify-between rounded-full p-2 px-8 transition-all duration-500 ${
-        isScrolled ? 'glass-card bg-navy-dark/90 shadow-2xl py-3' : 'bg-transparent'
+      <div className={`max-w-7xl mx-auto flex items-center justify-between transition-all duration-500 px-6 ${
+        isScrolled 
+          ? 'glass-card bg-navy-mid/90 shadow-premium py-3 rounded-2xl border-white/10' 
+          : 'bg-white/5 border border-white/5 py-4 rounded-3xl backdrop-blur-sm'
       }`}>
-        <a href="#" className="flex items-center gap-3 group">
-          <div className="w-12 h-12 gold-gradient rounded-xl flex items-center justify-center font-display font-extrabold text-navy-dark text-lg shadow-lg group-hover:rotate-6 transition-transform">
+        <a href="#" className="flex items-center group">
+          <div className="w-10 h-10 gold-gradient rounded-lg flex items-center justify-center font-display font-black text-navy-dark text-[10px] shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
             WW<br/>NDT
-          </div>
-          <div className="hidden sm:block">
-            <span className="text-xl font-bold tracking-tighter block leading-none">WORLD WIDE</span>
-            <span className="text-[10px] uppercase font-black tracking-widest text-gold">NDT Institute</span>
           </div>
         </a>
 
-        <nav className="hidden md:flex items-center gap-1">
-          {['Home', 'Courses', 'Why Us', 'Placement', 'FAQ'].map((item) => (
+        <nav className="hidden md:flex items-center gap-2">
+          {['Home', 'Courses', 'Why Us', 'Placement'].map((item) => (
             <a 
               key={item} 
               href={`#${item.toLowerCase().replace(' ', '-')}`} 
-              className="px-5 py-2 text-[13px] font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-widest relative group"
+              className="px-4 py-2 text-[10px] font-black text-white/40 hover:text-white transition-colors uppercase tracking-[0.3em] relative group"
             >
               {item}
-              <span className="absolute bottom-0 left-5 right-5 h-[2px] bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-center" />
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gold group-hover:w-4 transition-all" />
             </a>
           ))}
         </nav>
 
-        <div className="flex items-center gap-4">
-          <a href="tel:+917290095961" className="hidden lg:flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-gold transition-colors">
-            <Phone className="w-4 h-4 text-gold" /> +91 72900 95961
-          </a>
-          <a href="#admission" className="btn-primary py-3 px-8 rounded-full gold-gradient text-navy-dark font-bold text-sm shadow-xl shadow-gold/20 hover:scale-105 active:scale-95 transition-all">
-            Apply Now
+        <div className="flex items-center gap-6">
+          <a href="#admission" className="text-[10px] font-black uppercase tracking-[0.3em] text-gold border-b border-gold/30 hover:border-gold pb-1 transition-all">
+            Join The Academy
           </a>
         </div>
       </div>
@@ -125,140 +200,72 @@ const Navbar = () => {
 // --- Hero Section ---
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center pt-32 pb-40 overflow-hidden">
-      {/* Background elements moved to global index.css body background */}
+    <section className="relative min-h-[95vh] flex items-center pt-32 pb-40 overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-1/4 right-[-10%] w-[600px] h-[600px] bg-steel/30 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-gold/5 rounded-full blur-[100px]" />
-        <div className="absolute inset-0 bg-navy [mask-image:radial-gradient(ellipse_at_center,transparent_40%,black)]" />
+        <div className="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-steel/20 rounded-full blur-[140px] opacity-40" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[700px] h-[700px] bg-gold/5 rounded-full blur-[140px] opacity-30" />
+        <div className="absolute inset-0 bg-navy-dark/40" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 w-full">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-10 backdrop-blur-md">
-              <div className="w-2 h-2 bg-gold rounded-full animate-pulse shadow-[0_0_10px_#C8A45A]" />
-              <span className="text-[10px] font-bold text-gold uppercase tracking-[0.2em]">Admissions Open — Batch Starting Soon</span>
-            </div>
-            
-            <h1 className="text-5xl md:text-8xl font-black mb-8 leading-[0.95] tracking-tight shrink-0">
-               Launch Your <br />
-               <span className="gold-text">NDT & QA/QC</span> <br />
-               Industry Career
-            </h1>
-            
-            <p className="text-xl text-slate-300 leading-relaxed mb-12 max-w-xl opacity-80">
-              India's most trusted Non-Destructive Testing training institute. Get certified, get placed—with expert instructors and 100% job guarantee.
-            </p>
-
-            <div className="flex flex-wrap gap-6 items-center mb-16">
-              <motion.a 
-                href="#admission"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="gold-gradient text-navy-dark px-10 py-5 rounded-full font-bold text-lg shadow-2xl shadow-gold/30 flex items-center gap-3"
-              >
-                Enroll Now • Free Counselling <ChevronRight className="w-5 h-5" />
-              </motion.a>
-              <a href="#courses" className="flex items-center gap-3 text-white font-bold group">
-                <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:border-gold group-hover:bg-gold/10 transition-all">
-                  <Play className="w-4 h-4 fill-current text-white group-hover:text-gold" />
-                </div>
-                Browse Courses
-              </a>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 pt-12 border-t border-white/10">
-              {[
-                { n: "10K+", l: "Trained" },
-                { n: "100%", l: "Placement" },
-                { n: "50+", l: "Awards" },
-                { n: "15+", l: "Years" }
-              ].map((s, i) => (
-                <div key={i}>
-                  <div className="text-3xl font-display font-black text-gold mb-1">{s.n}</div>
-                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{s.l}</div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
+        <div className="max-w-4xl">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-            className="hidden lg:block relative"
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="relative glass-card bg-navy-mid/60 p-10 rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.5)] border-white/5 relative z-10">
-              <div className="absolute -top-10 -right-10 w-48 h-48 bg-gold/10 rounded-full blur-3xl animate-pulse" />
-              
-              <div className="flex items-center gap-4 mb-10 bg-gold/10 border border-gold/20 p-4 rounded-2xl">
-                 <div className="w-12 h-12 gold-gradient rounded-xl flex items-center justify-center">
-                    <Trophy className="w-6 h-6 text-navy-dark" />
-                 </div>
-                 <div>
-                    <div className="text-sm font-bold text-gold">100% Placement Guaranteed</div>
-                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Global Network Partner</div>
-                 </div>
-              </div>
-
-              <div className="space-y-4 mb-10">
-                {[
-                  { name: "NDT Level II Course", meta: "45 Days • Lab Training", price: "₹35K" },
-                  { name: "QA/QC Specialization", meta: "30 Days • Certified", price: "₹35K" },
-                  { name: "Fire & Safety Expert", meta: "3 Months • Field Prac", price: "₹45K" }
-                ].map((c, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-all group border border-white/5 hover:border-gold/30">
-                    <div>
-                      <div className="text-sm font-bold mb-1 group-hover:text-gold transition-colors">{c.name}</div>
-                      <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{c.meta}</div>
-                    </div>
-                    <div className="text-md font-display font-black text-gold">{c.price}</div>
-                  </div>
-                ))}
-              </div>
-
-              <button className="w-full py-5 rounded-2xl gold-gradient text-navy-dark font-extrabold text-lg shadow-xl shadow-gold/20 hover:scale-105 transition-transform">
-                 Claim Your Scholarship
-              </button>
+            <div className="inline-flex items-center gap-3 bg-white/5 border border-white/5 px-4 py-2 rounded-full mb-12 backdrop-blur-xl">
+              <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse shadow-[0_0_12px_#F9B233]" />
+              <span className="text-[9px] font-black text-gold uppercase tracking-[0.3em]">Excellence in Engineering Education</span>
             </div>
+            
+            <KineticText 
+              text="Forging Next-Gen Engineering Leaders"
+              className="text-6xl md:text-[9vw] font-black mb-10 leading-[0.85] tracking-[-0.05em] shrink-0"
+            />
+            
+            <div className="grid md:grid-cols-2 gap-12 items-end">
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 0.6, y: 0 }}
+                transition={{ delay: 0.8, duration: 1 }}
+                className="text-lg md:text-xl text-slate-200 leading-relaxed max-w-sm"
+              >
+                India's top tier NDT training ecosystem. We bridge the gap between classroom theory and global industrial mastery.
+              </motion.p>
 
-            {/* Floating Float Cards */}
-            <motion.div 
-               animate={{ y: [0, -15, 0] }}
-               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-               className="absolute -top-12 -left-12 glass-card p-6 rounded-2xl z-20 shadow-2xl"
-            >
-               <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">Google Rating</div>
-               <div className="flex items-center gap-3">
-                  <div className="text-2xl font-black text-gold">4.9</div>
-                  <div className="flex gap-1">
-                    {[1,2,3,4,5].map(s => <Star key={s} className="w-3 h-3 fill-gold text-gold" />)}
-                  </div>
-               </div>
-            </motion.div>
-
-            <motion.div 
-               animate={{ y: [0, 15, 0] }}
-               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-               className="absolute -bottom-10 -right-10 glass-card p-6 rounded-2xl z-20 shadow-2xl"
-            >
-               <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">Global Alumni</div>
-               <div className="text-2xl font-black text-gold">10K+</div>
-               <div className="flex -space-x-3 mt-4">
-                  {[1,2,3,4].map(i => (
-                    <div key={i} className="w-8 h-8 rounded-full border-2 border-navy-mid bg-slate-700" />
-                  ))}
-                  <div className="w-8 h-8 rounded-full border-2 border-navy-mid bg-navy-mid flex items-center justify-center text-[8px] font-black">+4K</div>
-               </div>
-            </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 1 }}
+                className="flex flex-wrap gap-6 items-center"
+              >
+                <a 
+                  href="#admission"
+                  className="group relative gold-gradient text-navy-dark px-12 py-6 rounded-full font-black text-lg overflow-hidden transition-all hover:scale-105 active:scale-95"
+                >
+                  <span className="relative z-10 flex items-center gap-3">
+                    Start Your Path <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </a>
+                <a href="#courses" className="text-white/60 hover:text-white font-bold text-sm uppercase tracking-widest transition-colors">
+                  Explore Specialties
+                </a>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>
+
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 2 }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-20"
+      >
+        <span className="text-[9px] font-black uppercase tracking-[0.4em]">Scroll to Discover</span>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-gold to-transparent" />
+      </motion.div>
     </section>
   );
 };
@@ -454,7 +461,10 @@ export default function App() {
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   return (
-    <div className="relative min-h-screen bg-navy selection:bg-gold selection:text-navy-dark technical-grid">
+    <div className="relative min-h-screen bg-navy-dark selection:bg-gold selection:text-navy-dark technical-grid font-sans overflow-x-hidden">
+      <div className="premium-grain" />
+      <CustomCursor />
+      
       <motion.div className="fixed top-0 left-0 right-0 h-1 gold-gradient origin-left z-[999]" style={{ scaleX }} />
       
       <TopTicker />
