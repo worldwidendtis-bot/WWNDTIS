@@ -357,7 +357,8 @@ const VideoCarousel = () => {
     <div className="relative group">
       <div 
         ref={containerRef}
-        className="flex gap-8 overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth pb-12"
+        className="flex gap-8 overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth pb-12 scrollbar-hide"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {testimonials.map((test) => (
           <motion.div 
@@ -501,6 +502,7 @@ export default function App() {
               price="45,000"
               duration="3 Months"
               type="Safety Specialist"
+              accentColor="steel"
             />
           </div>
         </div>
