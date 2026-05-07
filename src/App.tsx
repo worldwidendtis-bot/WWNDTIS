@@ -28,6 +28,8 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring, useInView, useMotionValue } from 'motion/react';
+import wwndtLogo from './assets/wwndt-logo.png';
+import heroRecognition from './assets/hero-recognition.jpeg';
 
 // --- Custom Cursor ---
 const CustomCursor = () => {
@@ -117,7 +119,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
 );
 
 const SectionTitle = ({ children, accent }: { children: React.ReactNode, accent?: string }) => (
-  <h2 className="text-4xl md:text-6xl font-black mb-6 leading-[1.1] tracking-tighter">
+  <h2 className="text-4xl md:text-6xl font-black mb-6 leading-[1.1]">
     {children} {accent && <span className="gold-text">{accent}</span>}
   </h2>
 );
@@ -128,18 +130,25 @@ const SectionSub = ({ children }: { children: React.ReactNode }) => (
   </p>
 );
 
+const socialLinks = [
+  { label: 'Facebook', href: 'https://www.facebook.com/worldwidendtinstitutenoida', icon: Facebook },
+  { label: 'Twitter', href: 'https://twitter.com/wwndtis', icon: Twitter },
+  { label: 'Instagram', href: 'https://www.instagram.com/wwndtis', icon: Instagram },
+  { label: 'YouTube', href: 'https://www.youtube.com/channel/UCvGvHyDoAqC8fuO3iS516_Q', icon: Youtube },
+];
+
 // --- Ticker ---
 const TopTicker = () => (
-  <div className="bg-navy-mid/40 backdrop-blur-md border-b border-white/5 h-10 flex items-center overflow-hidden whitespace-nowrap z-[100] relative">
+  <div className="bg-navy-dark/90 backdrop-blur-md border-b border-gold/20 h-10 flex items-center overflow-hidden whitespace-nowrap z-[100] relative">
     <motion.div
       animate={{ x: ["0%", "-50%"] }}
       transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
       className="flex gap-20 items-center px-4"
     >
       {Array(10).fill(null).map((_, i) => (
-        <span key={i} className="text-[9px] font-black text-white/30 uppercase tracking-[0.4em] flex items-center gap-6">
+        <span key={i} className="text-[9px] font-black text-porcelain/80 uppercase tracking-[0.28em] flex items-center gap-6">
           <span className="w-1 h-1 bg-gold rounded-full shadow-[0_0_8px_rgba(249,178,51,0.5)]" />
-          India's #1 NDT Training Institute • 100% Placement Guarantee • Admissions Open for May 2024 Batch
+          India's #1 NDT Training Institute • 100% Placement Guarantee • Admissions Open for May 2026 Batch
         </span>
       ))}
     </motion.div>
@@ -165,13 +174,17 @@ const Navbar = () => {
     >
       <div className={`max-w-7xl mx-auto flex items-center justify-between transition-all duration-500 px-6 ${
         isScrolled 
-          ? 'glass-card bg-navy-mid/90 shadow-premium py-3 rounded-2xl border-white/10' 
-          : 'bg-white/5 border border-white/5 py-4 rounded-3xl backdrop-blur-sm'
+          ? 'glass-card bg-navy-dark/95 shadow-premium py-3 rounded-2xl border-gold/20' 
+          : 'bg-navy-dark/80 border border-gold/15 py-4 rounded-2xl backdrop-blur-md palette-border'
       }`}>
-        <a href="#" className="flex items-center group">
-          <div className="w-10 h-10 gold-gradient rounded-lg flex items-center justify-center font-display font-black text-navy-dark text-[10px] shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-            WW<br/>NDT
-          </div>
+        <a href="#" className="flex items-center group" aria-label="World Wide NDT Institute">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full border border-gold/35 bg-white p-1.5 shadow-[0_10px_30px_rgba(249,178,51,0.18)] transition-all duration-300 group-hover:scale-105 group-hover:border-gold">
+            <img
+              src={wwndtLogo}
+              alt="World Wide NDT Institute"
+              className="h-full w-full object-contain"
+            />
+          </span>
         </a>
 
         <nav className="hidden md:flex items-center gap-2">
@@ -179,7 +192,7 @@ const Navbar = () => {
             <a 
               key={item} 
               href={`#${item.toLowerCase().replace(' ', '-')}`} 
-              className="px-4 py-2 text-[10px] font-black text-white/40 hover:text-white transition-colors uppercase tracking-[0.3em] relative group"
+              className="px-4 py-2 text-[10px] font-black text-porcelain/75 hover:text-white transition-colors uppercase tracking-[0.22em] relative group"
             >
               {item}
               <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gold group-hover:w-4 transition-all" />
@@ -188,7 +201,7 @@ const Navbar = () => {
         </nav>
 
         <div className="flex items-center gap-6">
-          <a href="#admission" className="text-[10px] font-black uppercase tracking-[0.3em] text-gold border-b border-gold/30 hover:border-gold pb-1 transition-all">
+          <a href="#admission" className="text-[10px] font-black uppercase tracking-[0.22em] text-gold-light border-b border-gold/50 hover:text-white hover:border-gold pb-1 transition-all">
             Join The Academy
           </a>
         </div>
@@ -200,38 +213,53 @@ const Navbar = () => {
 // --- Hero Section ---
 const Hero = () => {
   return (
-    <section className="relative min-h-[95vh] flex items-center pt-32 pb-40 overflow-hidden">
+    <section className="relative min-h-[95vh] flex items-center pt-32 pb-28 overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-steel/20 rounded-full blur-[140px] opacity-40" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[700px] h-[700px] bg-gold/5 rounded-full blur-[140px] opacity-30" />
-        <div className="absolute inset-0 bg-navy-dark/40" />
+        <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(11,13,43,0.98)_0%,rgba(45,46,131,0.9)_48%,rgba(20,69,47,0.92)_100%)]" />
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_40px_40px,rgba(255,255,255,0.35)_1px,transparent_1px)] bg-[length:28px_28px]" />
+        <div className="absolute left-0 top-24 h-72 w-72 rounded-full bg-gold/20 blur-[120px]" />
+        <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-navy-light/25 blur-[130px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 w-full">
-        <div className="max-w-4xl">
+        <div className="grid lg:grid-cols-[0.95fr_1.05fr] gap-12 xl:gap-18 items-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="inline-flex items-center gap-3 bg-white/5 border border-white/5 px-4 py-2 rounded-full mb-12 backdrop-blur-xl">
-              <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse shadow-[0_0_12px_#F9B233]" />
-              <span className="text-[9px] font-black text-gold uppercase tracking-[0.3em]">Excellence in Engineering Education</span>
+            <div className="mb-8 flex flex-wrap items-center gap-3">
+              <div className="inline-flex items-center gap-3 rounded-full border border-gold/30 bg-gold/10 px-4 py-2 backdrop-blur-xl">
+                <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse shadow-[0_0_12px_#F9B233]" />
+                <span className="text-[9px] font-black text-gold uppercase tracking-[0.3em]">Admissions Open</span>
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[9px] font-black uppercase tracking-[0.22em] text-white/60 backdrop-blur-xl">
+                <ShieldCheck className="h-3.5 w-3.5 text-mint" />
+                ISO aligned training
+              </div>
             </div>
             
             <KineticText 
-              text="Forging Next-Gen Engineering Leaders"
-              className="text-6xl md:text-[9vw] font-black mb-10 leading-[0.85] tracking-[-0.05em] shrink-0"
+              text="Build A Global Career In NDT Inspection"
+              className="precision-text text-5xl md:text-7xl xl:text-8xl font-black mb-8 leading-[0.94] shrink-0"
             />
+
+            <div className="mb-8 flex flex-wrap gap-3">
+              {["NDT Level II", "QA/QC", "Fire & Safety"].map((item) => (
+                <span key={item} className="rounded-lg border border-white/12 bg-white/8 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-white/70 backdrop-blur-xl">
+                  {item}
+                </span>
+              ))}
+            </div>
             
-            <div className="grid md:grid-cols-2 gap-12 items-end">
+            <div className="grid md:grid-cols-[0.95fr_1fr] gap-8 items-end">
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 0.6, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8, duration: 1 }}
-                className="text-lg md:text-xl text-slate-200 leading-relaxed max-w-sm"
+                className="text-lg md:text-xl text-slate-100 leading-relaxed max-w-md"
               >
-                India's top tier NDT training ecosystem. We bridge the gap between classroom theory and global industrial mastery.
+                Hands-on industrial inspection training with real equipment, expert mentors, and placement support for India and Gulf careers.
               </motion.p>
 
               <motion.div 
@@ -242,16 +270,68 @@ const Hero = () => {
               >
                 <a 
                   href="#admission"
-                  className="group relative gold-gradient text-navy-dark px-12 py-6 rounded-full font-black text-lg overflow-hidden transition-all hover:scale-105 active:scale-95"
+                  className="group relative gold-gradient text-navy-dark px-9 py-5 rounded-xl font-black text-base overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_18px_44px_rgba(249,178,51,0.24)]"
                 >
                   <span className="relative z-10 flex items-center gap-3">
-                    Start Your Path <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    Apply Now <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </a>
-                <a href="#courses" className="text-white/60 hover:text-white font-bold text-sm uppercase tracking-widest transition-colors">
-                  Explore Specialties
+                <a href="tel:+917290095961" className="group flex items-center gap-3 rounded-xl border border-white/15 bg-white/10 px-5 py-4 text-sm font-black text-white/80 backdrop-blur-xl transition-all hover:border-gold/40 hover:text-white">
+                  <Phone className="h-4 w-4 text-gold" />
+                  Call Advisor
                 </a>
               </motion.div>
+            </div>
+            <div className="mt-10 grid grid-cols-3 gap-3 max-w-xl">
+              {[
+                ["10K+", "Students"],
+                ["100%", "Placement"],
+                ["45", "Day Training"]
+              ].map(([value, label]) => (
+                <div key={label} className="rounded-xl border border-white/10 bg-white/10 p-4 backdrop-blur-xl">
+                  <div className="text-2xl font-black text-gold">{value}</div>
+                  <div className="mt-1 text-[9px] font-black uppercase tracking-[0.22em] text-white/50">{label}</div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.45, duration: 1 }}
+            className="relative"
+          >
+            <div className="hero-visual technical-panel palette-border rounded-2xl p-3 md:p-4 relative overflow-hidden">
+              <div className="absolute left-6 top-6 z-20 hidden sm:flex items-center gap-3 rounded-xl border border-white/15 bg-navy-dark/75 px-4 py-3 backdrop-blur-xl">
+                <Search className="h-4 w-4 text-gold" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70">Live Lab Inspection</span>
+              </div>
+              <img
+                src={heroRecognition}
+                alt="World Wide Institute recognition ceremony"
+                className="h-[440px] md:h-[560px] xl:h-[640px] w-full rounded-xl object-cover object-top opacity-95"
+              />
+              <div className="absolute inset-3 md:inset-4 rounded-xl bg-gradient-to-t from-navy-dark/80 via-navy-dark/20 to-transparent" />
+              <div className="absolute inset-3 md:inset-4 rounded-xl hero-scan" />
+              <div className="absolute left-6 right-6 bottom-6 grid grid-cols-2 gap-3 md:left-8 md:right-8 md:bottom-8 md:gap-4">
+                {[
+                  { icon: Award, label: "Certification", value: "ASNT Style" },
+                  { icon: Microscope, label: "Equipment", value: "UT / RT / MT" },
+                  { icon: Globe2, label: "Hiring Reach", value: "Gulf + India" },
+                  { icon: CheckCircle2, label: "Placement Prep", value: "Included" }
+                ].map((item) => (
+                  <div key={item.label} className="rounded-xl border border-white/15 bg-navy-dark/75 p-3 md:p-4 backdrop-blur-xl">
+                    <item.icon className="mb-3 h-5 w-5 text-gold" />
+                    <div className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.18em] text-white/45">{item.label}</div>
+                    <div className="mt-1 text-sm md:text-lg font-black text-white">{item.value}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="absolute right-6 top-20 hidden md:block rounded-xl border border-gold/25 bg-gold/95 p-4 text-navy-dark shadow-[0_18px_40px_rgba(249,178,51,0.25)]">
+                <div className="text-[9px] font-black uppercase tracking-[0.2em] opacity-70">Batch Starts</div>
+                <div className="mt-1 text-2xl font-black">May 2026</div>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -287,31 +367,36 @@ const TrustStrip = () => (
 );
 
 // --- Course Card ---
-const CourseCard = ({ icon: Icon, title, desc, price, duration, type, accentColor = "gold" }: any) => (
+const CourseCard = ({ icon: Icon, title, desc, price, duration, type, accentColor = "gold" }: any) => {
+  const accent = accentColor === "steel"
+    ? { wrap: "bg-steel/20 border-steel/35", icon: "text-mint", hover: "group-hover:text-mint" }
+    : { wrap: "bg-gold/10 border-gold/25", icon: "text-gold", hover: "group-hover:text-gold" };
+
+  return (
   <motion.div 
      whileHover={{ y: -10 }}
-     className="glass-card bg-navy-mid/40 p-10 rounded-[2.5rem] border-white/5 group hover:border-gold/30 transition-all duration-500 flex flex-col h-full overflow-hidden relative"
+     className="glass-card bg-navy-mid/35 p-8 rounded-2xl border-white/10 group hover:border-gold/35 transition-all duration-500 flex flex-col h-full overflow-hidden relative"
   >
     <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
        <Icon className="w-32 h-32" />
     </div>
     
-    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-8 bg-${accentColor}/10 border border-${accentColor}/20`}>
-      <Icon className={`w-7 h-7 text-${accentColor}`} />
+    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-8 border ${accent.wrap}`}>
+      <Icon className={`w-7 h-7 ${accent.icon}`} />
     </div>
     
     <div className="flex gap-1 mb-4">
       {[1,2,3,4,5].map(s => <Star key={s} className="w-3 h-3 fill-gold text-gold" />)}
     </div>
     
-    <h3 className="text-2xl font-bold mb-4 group-hover:text-gold transition-colors">{title}</h3>
+    <h3 className={`text-2xl font-bold mb-4 transition-colors ${accent.hover}`}>{title}</h3>
     <p className="text-slate-400 text-sm leading-relaxed mb-8 flex-grow">{desc}</p>
     
     <div className="flex items-center gap-4 mb-8">
-      <div className="bg-white/5 px-4 py-1.5 rounded-full border border-white/10 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+      <div className="bg-white/5 px-4 py-1.5 rounded-lg border border-white/10 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
         <Clock className="w-3 h-3 text-gold" /> {duration}
       </div>
-      <div className="bg-white/5 px-4 py-1.5 rounded-full border border-white/10 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+      <div className="bg-white/5 px-4 py-1.5 rounded-lg border border-white/10 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
         <Zap className="w-3 h-3 text-gold" /> {type}
       </div>
     </div>
@@ -326,7 +411,8 @@ const CourseCard = ({ icon: Icon, title, desc, price, duration, type, accentColo
       </a>
     </div>
   </motion.div>
-);
+  );
+};
 
 // --- Video Carousel ---
 const VideoCarousel = () => {
@@ -483,7 +569,7 @@ export default function App() {
               <SectionTitle accent="Courses">Industry-Leading</SectionTitle>
               <SectionSub>Comprehensive training designed by industry veterans. Get certified and job-ready in 45 days.</SectionSub>
             </div>
-            <a href="#admission" className="glass-card px-8 py-3 rounded-full text-sm font-bold border-white/10 hover:border-gold/30 transition-all mb-12 md:mb-0">
+            <a href="#admission" className="glass-card px-8 py-3 rounded-xl text-sm font-bold border-white/10 hover:border-gold/30 transition-all mb-12 md:mb-0">
                View All Programs →
             </a>
           </div>
@@ -523,7 +609,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-24 items-center">
              <div className="relative">
-                <div className="aspect-square glass-card bg-navy-light/60 rounded-[3rem] p-12 flex flex-col justify-center gap-8 relative z-10">
+                <div className="aspect-square glass-card technical-panel rounded-2xl p-10 flex flex-col justify-center gap-8 relative z-10 palette-border">
                    <div className="grid grid-cols-2 gap-8">
                      {[
                        { n: "10K+", l: "Students Trained" },
@@ -531,7 +617,7 @@ export default function App() {
                        { n: "50+", l: "Industry Partners" },
                        { n: "15+", l: "Years Excellence" }
                      ].map((s, i) => (
-                       <div key={i} className="glass-card p-8 rounded-3xl border-white/5 relative overflow-hidden group">
+                       <div key={i} className="glass-card p-6 rounded-xl border-white/10 relative overflow-hidden group">
                           <div className="text-4xl font-black text-gold mb-2">{s.n}</div>
                           <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.l}</div>
                           <div className="absolute bottom-0 left-0 h-1 w-0 bg-gold transition-all group-hover:w-full" />
@@ -561,7 +647,7 @@ export default function App() {
              <div>
                 <SectionLabel>Why Choose Us</SectionLabel>
                 <SectionTitle accent="Trusted">India's Most</SectionTitle>
-                <SectionSub>We don't just teach — we transform careers. Our track record speaks for itself with global success stories.</SectionSub>
+                <SectionSub>We don't just teach; we transform careers. Our track record speaks for itself with global success stories.</SectionSub>
                 
                 <div className="space-y-8 mt-12">
                    {[
@@ -570,7 +656,7 @@ export default function App() {
                      { i:Target, t: "Global Network", d: "Direct recruitment links with MNCs in UAE, Saudi Arabia, and Europe." }
                    ].map((f, i) => (
                      <div key={i} className="flex gap-6 group">
-                        <div className="w-14 h-14 rounded-2xl glass-card flex items-center justify-center shrink-0 group-hover:bg-gold/10 transition-colors">
+                        <div className="w-14 h-14 rounded-xl glass-card flex items-center justify-center shrink-0 group-hover:bg-gold/10 transition-colors">
                            <f.i className="w-7 h-7 text-gold" />
                         </div>
                         <div>
@@ -590,7 +676,7 @@ export default function App() {
          <div className="max-w-5xl mx-auto px-6">
             <motion.div 
                whileInView={{ scale: [0.95, 1], opacity: [0, 1] }}
-               className="glass-card bg-navy-mid p-16 rounded-[4rem] text-center relative overflow-hidden backdrop-blur-3xl border-gold/10"
+               className="glass-card technical-panel p-12 md:p-16 rounded-2xl text-center relative overflow-hidden backdrop-blur-3xl border-gold/15 palette-border"
             >
                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-gold/10 rounded-full blur-[80px]" />
                
@@ -634,7 +720,7 @@ export default function App() {
                 { n: "MD Javed", r: "NDT Specialist", c: "10+ Yrs Exp", i: "MJ" },
                 { n: "Deepak Kumar", r: "Tech Lead", c: "Certified Level III", i: "DK" }
               ].map((m, i) => (
-                <motion.div key={i} whileHover={{ y: -8 }} className="glass-card p-10 rounded-[2.5rem] text-center group border-white/5 hover:border-gold/30 transition-all">
+                <motion.div key={i} whileHover={{ y: -8 }} className="glass-card p-8 rounded-2xl text-center group border-white/10 hover:border-gold/30 transition-all">
                    <div className="w-24 h-24 rounded-full gold-gradient flex items-center justify-center font-display font-black text-3xl text-navy-dark mx-auto mb-8 shadow-2xl group-hover:scale-110 transition-transform">
                       {m.i}
                    </div>
@@ -693,7 +779,7 @@ export default function App() {
                 </div>
              </div>
              
-             <div className="glass-card bg-navy-mid/60 p-12 rounded-[3.5rem] border-white/10 shadow-3xl">
+             <div className="glass-card bg-navy-mid/60 p-8 md:p-12 rounded-2xl border-white/10 shadow-premium palette-border">
                 <h3 className="text-3xl font-bold mb-2 tracking-tight">Apply Online</h3>
                 <p className="text-slate-500 text-sm mb-10">Limited seats for the upcoming batch. Apply today.</p>
                 
@@ -736,9 +822,9 @@ export default function App() {
       <div className="max-w-7xl mx-auto px-6 mb-40">
         <motion.div 
            whileHover={{ scale: 1.01 }}
-           className="gold-gradient p-1 bg-white rounded-[4rem] group"
+           className="gold-gradient p-1 rounded-2xl group"
         >
-           <div className="bg-navy-dark rounded-[3.8rem] p-16 lg:p-24 flex flex-col md:flex-row items-center justify-between gap-12 overflow-hidden relative">
+           <div className="bg-navy-dark rounded-[0.9rem] p-10 lg:p-16 flex flex-col md:flex-row items-center justify-between gap-12 overflow-hidden relative">
               <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[100px] group-hover:scale-150 transition-transform duration-1000" />
               <div className="relative z-10 max-w-xl text-center md:text-left">
                  <h2 className="text-4xl lg:text-6xl font-black mb-6 leading-tight tracking-tight">Final Countdown <br /> <span className="gold-text">Join The Best</span></h2>
@@ -758,7 +844,7 @@ export default function App() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-navy-dark pt-32 pb-12 border-t border-white/5 relative overflow-hidden">
+      <footer className="bg-[#090B24] pt-32 pb-12 border-t border-gold/15 relative overflow-hidden">
         {/* Accents */}
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-gold/5 blur-[120px] rounded-full" />
         
@@ -766,18 +852,28 @@ export default function App() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-20 mb-24">
              <div className="lg:col-span-1">
                 <a href="#" className="flex items-center gap-3 mb-10 group">
-                  <div className="w-10 h-10 gold-gradient rounded-xl flex items-center justify-center font-display font-extrabold text-navy-dark text-md shadow-lg group-hover:rotate-6 transition-transform">
-                    WW<br/>NDT
-                  </div>
+                  <img
+                    src={wwndtLogo}
+                    alt="World Wide NDT Institute"
+                    className="h-12 w-12 object-contain rounded-full shadow-lg transition-transform group-hover:rotate-6"
+                  />
                   <div>
-                    <span className="text-lg font-bold tracking-tighter block leading-none">WORLD WIDE</span>
-                    <span className="text-[8px] uppercase font-black tracking-widest text-gold text-center">NDT Institute</span>
+                    <span className="text-lg font-bold block leading-none text-white">WORLD WIDE</span>
+                    <span className="text-[8px] uppercase font-black tracking-widest text-gold-light text-center">NDT Institute</span>
                   </div>
                 </a>
-                <p className="text-slate-500 text-sm leading-relaxed mb-10 max-w-xs">India's premier institute for NDT training and industrial safety. Setting global benchmarks in certification excellence.</p>
+                <p className="text-slate-300 text-sm leading-relaxed mb-10 max-w-xs">India's premier institute for NDT training and industrial safety. Setting global benchmarks in certification excellence.</p>
                 <div className="flex gap-4">
-                  {[Facebook, Twitter, Instagram, Youtube].map((Icon, i) => (
-                    <a key={i} href="#" className="w-10 h-10 rounded-xl glass-card border-white/10 flex items-center justify-center hover:bg-gold hover:text-navy-dark transition-all duration-300">
+                  {socialLinks.map(({ label, href, icon: Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      title={label}
+                      className="w-10 h-10 rounded-xl glass-card border-white/10 flex items-center justify-center hover:bg-gold hover:text-navy-dark transition-all duration-300"
+                    >
                       <Icon className="w-5 h-5" />
                     </a>
                   ))}
@@ -785,47 +881,47 @@ export default function App() {
              </div>
 
              <div className="space-y-8">
-                <h5 className="text-[11px] font-black uppercase tracking-[0.3em] text-gold">Programs</h5>
+                <h5 className="text-[11px] font-black uppercase tracking-[0.24em] text-gold-light">Programs</h5>
                 <ul className="space-y-4">
                    {["NDT Level II Certification", "QA/QC Civil Engineer", "Radiographic Inspection", "MT & PT Masterclass", "NDT Combo Pack"].map(l => (
-                     <li key={l}><a href="#" className="text-sm font-bold text-slate-400 hover:text-white transition-colors">{l}</a></li>
+                     <li key={l}><a href="#" className="text-sm font-bold text-slate-300 hover:text-gold-light transition-colors">{l}</a></li>
                    ))}
                 </ul>
              </div>
 
              <div className="space-y-8">
-                <h5 className="text-[11px] font-black uppercase tracking-[0.3em] text-gold">Company</h5>
+                <h5 className="text-[11px] font-black uppercase tracking-[0.24em] text-gold-light">Company</h5>
                 <ul className="space-y-4">
                    {["About Our Institute", "Meet The Faculty", "Placement Track", "Success Stories", "Scholarship Docs"].map(l => (
-                     <li key={l}><a href="#" className="text-sm font-bold text-slate-400 hover:text-white transition-colors">{l}</a></li>
+                     <li key={l}><a href="#" className="text-sm font-bold text-slate-300 hover:text-gold-light transition-colors">{l}</a></li>
                    ))}
                 </ul>
              </div>
 
              <div className="space-y-8">
-                <h5 className="text-[11px] font-black uppercase tracking-[0.3em] text-gold">Headquarters</h5>
+                <h5 className="text-[11px] font-black uppercase tracking-[0.24em] text-gold-light">Headquarters</h5>
                 <ul className="space-y-5">
                    <li className="flex gap-4 items-start">
                       <MapPin className="w-5 h-5 text-gold shrink-0 mt-1" />
-                      <span className="text-sm text-slate-400 font-medium">Global Plaza Complex, <br /> Sector 135, Noida, UP • India</span>
+                      <span className="text-sm text-slate-300 font-medium">Office no-411 ,Tower-1 <br></br>Assotech Business Cresterra, <br /> Sector 135, Noida, UP • India</span>
                    </li>
                    <li className="flex gap-4 items-center">
                       <Phone className="w-5 h-5 text-gold shrink-0" />
-                      <span className="text-sm text-slate-400 font-bold">+91 72900 95961</span>
+                      <span className="text-sm text-slate-200 font-bold">+91 72900 95961<br></br> +91 7290095964</span>
                    </li>
                    <li className="flex gap-4 items-center">
                       <Mail className="w-5 h-5 text-gold shrink-0" />
-                      <span className="text-sm text-slate-400 font-bold">info@ndtis.in</span>
+                      <span className="text-sm text-slate-200 font-bold">info@wwndtis.in</span>
                    </li>
                 </ul>
              </div>
           </div>
           
-          <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-             <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">© 2024 WORLD WIDE NDT INSTITUTE & SERVICES • ALL RIGHTS RESERVED</p>
+          <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8">
+             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">© 2026 WORLD WIDE NDT INSTITUTE & SERVICES • ALL RIGHTS RESERVED</p>
              <div className="flex gap-10">
                 {["Privacy", "Liability", "Standards"].map(l => (
-                  <a key={l} href="#" className="text-[10px] font-bold text-slate-600 uppercase tracking-widest hover:text-gold transition-colors">{l}</a>
+                  <a key={l} href="#" className="text-[10px] font-bold text-slate-300 uppercase tracking-widest hover:text-gold-light transition-colors">{l}</a>
                 ))}
              </div>
           </div>
